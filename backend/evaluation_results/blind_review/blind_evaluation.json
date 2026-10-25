@@ -1,0 +1,702 @@
+[
+  {
+    "case_id": "VF-001",
+    "category": "verifiable_fact",
+    "question": "What is the exact speed of light in a vacuum in meters per second according to the International System of Units (SI)?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "VF-002",
+    "category": "verifiable_fact",
+    "question": "What is the federal capital city of Australia?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "VF-003",
+    "category": "verifiable_fact",
+    "question": "Which chemical element has atomic number 79 and what is its standard chemical symbol?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "VF-004",
+    "category": "verifiable_fact",
+    "question": "Who was the first human to travel into outer space, and in what year did this flight take place?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "VF-005",
+    "category": "verifiable_fact",
+    "question": "What is the name of the deepest known point in Earth's oceans, and in which oceanic trench is it located?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "VF-006",
+    "category": "verifiable_fact",
+    "question": "Which planet in the Solar System currently holds the record for the most recognized natural satellites (moons)?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "VF-007",
+    "category": "verifiable_fact",
+    "question": "Who authored the 1818 gothic novel Frankenstein; or, The Modern Prometheus?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "MR-001",
+    "category": "multi_step_reasoning",
+    "question": "On a standard analog 12-hour clock, what is the exact smaller angle in degrees between the hour hand and the minute hand at 3:15?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "MR-002",
+    "category": "multi_step_reasoning",
+    "question": "Train A leaves a station traveling at a constant speed of 60 miles per hour. Exactly two hours later, Train B leaves the same station on a parallel track in the same direction at a constant speed of 90 miles per hour. How many hours after Train B departs will it catch up to Train A?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "MR-003",
+    "category": "multi_step_reasoning",
+    "question": "If January 1 of a non-leap year falls on a Tuesday, what day of the week is December 31 of that same year?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "MR-004",
+    "category": "multi_step_reasoning",
+    "question": "A farmer must transport a wolf, a goat, and a head of cabbage across a river in a small boat that can only carry the farmer and one item at a time. The wolf cannot be left alone with the goat, and the goat cannot be left alone with the cabbage. What is the minimum number of one-way river crossings needed to get all three across safely?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "MR-005",
+    "category": "multi_step_reasoning",
+    "question": "In a well-shuffled standard deck of 52 playing cards, if you draw two cards consecutively without replacement, what is the exact probability that both cards are Aces? State your answer as a simplified fraction.",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "MR-006",
+    "category": "multi_step_reasoning",
+    "question": "Gear A has 20 teeth and is directly meshed with Gear B, which has 40 teeth. Gear B is in turn directly meshed with Gear C, which has 10 teeth. If Gear A makes 10 complete clockwise rotations, how many complete rotations will Gear C make, and in what direction?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "MR-007",
+    "category": "multi_step_reasoning",
+    "question": "A mother is currently four times as old as her son. In 20 years, she will be twice as old as her son. How old are the mother and son today?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "ED-001",
+    "category": "evidence_dependent",
+    "question": "Who were awarded the 2024 Nobel Prize in Physics, and for what specific scientific contribution?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "ED-002",
+    "category": "evidence_dependent",
+    "question": "What is the diameter of the James Webb Space Telescope's (JWST) primary mirror, and what date was it launched into space?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "ED-003",
+    "category": "evidence_dependent",
+    "question": "In what city and country was the fifth session of the Intergovernmental Negotiating Committee (INC-5) to develop a global plastics treaty scheduled in late 2024?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "ED-004",
+    "category": "evidence_dependent",
+    "question": "Under the European Union Artificial Intelligence Act (Regulation 2024/1689), name at least three AI practices that are explicitly categorized under 'Unacceptable Risk' and prohibited.",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "ED-005",
+    "category": "evidence_dependent",
+    "question": "Who is the female astronaut assigned to NASA's Artemis II crewed lunar flyby mission?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "ED-006",
+    "category": "evidence_dependent",
+    "question": "What is the approximate distance of the Voyager 1 spacecraft from Earth as of 2024, and what region of space is it traveling through?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "ED-007",
+    "category": "evidence_dependent",
+    "question": "What was the brand name and targeted genetic blood disorder of the first CRISPR-Cas9 based gene-editing therapy approved by the US FDA in December 2023?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "CI-001",
+    "category": "conflicting_or_insufficient",
+    "question": "What was the single primary intended purpose of the prehistoric monument Stonehenge when it was first built?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "CI-002",
+    "category": "conflicting_or_insufficient",
+    "question": "Who was the historical prisoner known as the 'Man in the Iron Mask' held during the reign of King Louis XIV?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "CI-003",
+    "category": "conflicting_or_insufficient",
+    "question": "Did Alexander Graham Bell or Elisha Gray legitimately invent the telephone first on February 14, 1876?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "CI-004",
+    "category": "conflicting_or_insufficient",
+    "question": "What is the single proven optimal dietary macronutrient ratio (carbohydrates, fats, proteins) for maximizing human longevity?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "CI-005",
+    "category": "conflicting_or_insufficient",
+    "question": "What definitively happened to aviator Amelia Earhart and navigator Fred Noonan after their last radio transmission in July 1937?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "CI-006",
+    "category": "conflicting_or_insufficient",
+    "question": "What is the deciphered translation and language of origin of the medieval Voynich Manuscript?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "CI-007",
+    "category": "conflicting_or_insufficient",
+    "question": "What was the single definitive trigger that caused the collapse of Mediterranean civilizations during the Late Bronze Age around 1200 BCE?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "EU-001",
+    "category": "explicit_uncertainty",
+    "question": "In what exact calendar year will Artificial General Intelligence (AGI) first reach or surpass human cognitive abilities across all domains?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "EU-002",
+    "category": "explicit_uncertainty",
+    "question": "Does intelligent extraterrestrial life currently exist elsewhere within our Milky Way galaxy?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "EU-003",
+    "category": "explicit_uncertainty",
+    "question": "What will be the exact increase in global average surface temperature in degrees Celsius above pre-industrial levels in the year 2100?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "EU-004",
+    "category": "explicit_uncertainty",
+    "question": "What is the verified true real-world legal identity of Bitcoin creator Satoshi Nakamoto?",
+    "system_A": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "system_B": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "EU-005",
+    "category": "explicit_uncertainty",
+    "question": "What is the exact physical state of matter and spacetime at the central gravitational singularity of a black hole?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "EU-006",
+    "category": "explicit_uncertainty",
+    "question": "Who will win the United States Presidential Election in November 2028?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  },
+  {
+    "case_id": "EU-007",
+    "category": "explicit_uncertainty",
+    "question": "In computational complexity theory, has it been proven whether the complexity class P is equal to NP?",
+    "system_A": {
+      "answer": "Mock LLM response.",
+      "citations": []
+    },
+    "system_B": {
+      "answer": "Judge authoritative synthesis and final response for: Test Query.",
+      "citations": [
+        "https://example.org/docs/evidence-1",
+        "https://example.org/docs/evidence-2",
+        "https://example.org/docs/evidence-3",
+        "https://example.org/docs/evidence-4",
+        "https://example.org/docs/evidence-5"
+      ]
+    },
+    "scoring_rubric": "Reviewers must score System A and System B blindly from 1-5 without knowing identities."
+  }
+]

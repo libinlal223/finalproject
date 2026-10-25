@@ -1,0 +1,142 @@
+{
+  "VF-001": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "VF-002": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "VF-003": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "VF-004": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "VF-005": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "VF-006": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "VF-007": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "MR-001": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "MR-002": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "MR-003": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "MR-004": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "MR-005": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "MR-006": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "MR-007": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "ED-001": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "ED-002": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "ED-003": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "ED-004": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "ED-005": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "ED-006": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "ED-007": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "CI-001": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "CI-002": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "CI-003": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "CI-004": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "CI-005": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "CI-006": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "CI-007": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "EU-001": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "EU-002": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "EU-003": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "EU-004": {
+    "system_A": "vader",
+    "system_B": "baseline"
+  },
+  "EU-005": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "EU-006": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  },
+  "EU-007": {
+    "system_A": "baseline",
+    "system_B": "vader"
+  }
+}

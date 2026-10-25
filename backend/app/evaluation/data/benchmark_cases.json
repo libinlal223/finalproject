@@ -1,0 +1,774 @@
+{
+  "version": "1.0.0",
+  "description": "VADER Evaluation Benchmark Dataset for Adversarial Collaborative Reasoning vs Baseline",
+  "last_updated": "2026-10-16",
+  "cases": [
+    {
+      "case_id": "VF-001",
+      "category": "verifiable_fact",
+      "question": "What is the exact speed of light in a vacuum in meters per second according to the International System of Units (SI)?",
+      "expected_answer": "The speed of light in vacuum is exactly 299,792,458 meters per second.",
+      "reference_facts": [
+        "299,792,458 m/s",
+        "exact defined physical constant in SI units",
+        "speed of light in vacuum"
+      ],
+      "evidence_criteria": [
+        "BIPM SI brochure definition of the metre (17th CGPM, 1983)"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["299,792,458", "exact"],
+        "rubric": "Full marks for providing the exact value 299,792,458 m/s without rounding error. Partial if approximate 3x10^8 m/s given without noting exactness.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "International Bureau of Weights and Measures (BIPM), 17th Conférence Générale des Poids et Mesures (1983).",
+      "limitations": "Strict numerical factual check; leaves no room for ambiguity."
+    },
+    {
+      "case_id": "VF-002",
+      "category": "verifiable_fact",
+      "question": "What is the federal capital city of Australia?",
+      "expected_answer": "Canberra is the capital city of Australia.",
+      "reference_facts": [
+        "Canberra",
+        "Australia",
+        "federal capital"
+      ],
+      "evidence_criteria": [
+        "Official Australian government records and Commonwealth Constitution"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Canberra"],
+        "rubric": "Full marks for Canberra. Zero marks if Sydney or Melbourne is incorrectly named as the capital.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "Australian Government Parliamentary Handbook, Seat of Government Act 1908.",
+      "limitations": "Commonly confused with Sydney or Melbourne."
+    },
+    {
+      "case_id": "VF-003",
+      "category": "verifiable_fact",
+      "question": "Which chemical element has atomic number 79 and what is its standard chemical symbol?",
+      "expected_answer": "The chemical element with atomic number 79 is Gold, with standard chemical symbol Au.",
+      "reference_facts": [
+        "Gold",
+        "Au",
+        "atomic number 79"
+      ],
+      "evidence_criteria": [
+        "IUPAC Periodic Table of the Elements"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Gold", "Au"],
+        "rubric": "Must name both Gold and chemical symbol Au correctly.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "International Union of Pure and Applied Chemistry (IUPAC) Periodic Table.",
+      "limitations": "Direct chemical nomenclature retrieval."
+    },
+    {
+      "case_id": "VF-004",
+      "category": "verifiable_fact",
+      "question": "Who was the first human to travel into outer space, and in what year did this flight take place?",
+      "expected_answer": "Soviet cosmonaut Yuri Gagarin became the first human in space on April 12, 1961, aboard Vostok 1.",
+      "reference_facts": [
+        "Yuri Gagarin",
+        "1961",
+        "Vostok 1"
+      ],
+      "evidence_criteria": [
+        "Fédération Aéronautique Internationale (FAI) astronautics record"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Yuri Gagarin", "1961"],
+        "rubric": "Must identify Yuri Gagarin and the year 1961.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "FAI World Air Sports Federation Official Astronautics Register (April 1961).",
+      "limitations": "Historical spaceflight milestone."
+    },
+    {
+      "case_id": "VF-005",
+      "category": "verifiable_fact",
+      "question": "What is the name of the deepest known point in Earth's oceans, and in which oceanic trench is it located?",
+      "expected_answer": "The Challenger Deep is the deepest known point, located in the southern end of the Mariana Trench in the western Pacific Ocean.",
+      "reference_facts": [
+        "Challenger Deep",
+        "Mariana Trench",
+        "Pacific Ocean"
+      ],
+      "evidence_criteria": [
+        "NOAA Ocean Exploration and Bathymetry Archives"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Challenger Deep", "Mariana Trench"],
+        "rubric": "Full marks for naming both Challenger Deep and the Mariana Trench.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "National Oceanic and Atmospheric Administration (NOAA) Bathymetric Data Center.",
+      "limitations": "Depth estimates vary slightly (~10,900 to 11,000 m), but feature name and trench are invariant."
+    },
+    {
+      "case_id": "VF-006",
+      "category": "verifiable_fact",
+      "question": "Which planet in the Solar System currently holds the record for the most recognized natural satellites (moons)?",
+      "expected_answer": "Saturn holds the record with over 140 officially recognized moons, surpassing Jupiter.",
+      "reference_facts": [
+        "Saturn",
+        "over 140 moons",
+        "surpassed Jupiter"
+      ],
+      "evidence_criteria": [
+        "IAU Minor Planet Center and NASA Solar System Exploration satellite tallies"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Saturn"],
+        "rubric": "Must identify Saturn (Jupiter was previously leading until discoveries in 2023).",
+        "uncertainty_required": false
+      },
+      "source_provenance": "International Astronomical Union (IAU) Minor Planet Center Circulars (2023–2024).",
+      "limitations": "Knowledge boundary check: tests whether model knows Saturn surpassed Jupiter in 2023."
+    },
+    {
+      "case_id": "VF-007",
+      "category": "verifiable_fact",
+      "question": "Who authored the 1818 gothic novel Frankenstein; or, The Modern Prometheus?",
+      "expected_answer": "Mary Shelley (Mary Wollstonecraft Shelley) authored Frankenstein, first published anonymously in 1818.",
+      "reference_facts": [
+        "Mary Shelley",
+        "published in 1818"
+      ],
+      "evidence_criteria": [
+        "British Library Literary Manuscripts and English Literature canon"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Mary Shelley"],
+        "rubric": "Must correctly identify Mary Shelley (or Mary Wollstonecraft Shelley).",
+        "uncertainty_required": false
+      },
+      "source_provenance": "British Library Collections, Frankenstein manuscript and 1818 first edition.",
+      "limitations": "Unambiguous literary authorship."
+    },
+    {
+      "case_id": "MR-001",
+      "category": "multi_step_reasoning",
+      "question": "On a standard analog 12-hour clock, what is the exact smaller angle in degrees between the hour hand and the minute hand at 3:15?",
+      "expected_answer": "The smaller angle between the hands at 3:15 is exactly 7.5 degrees.",
+      "reference_facts": [
+        "7.5 degrees",
+        "At 15 minutes, minute hand is at 90 degrees",
+        "Hour hand has moved 15/60 * 30 = 7.5 degrees past the 3 (90 degrees)",
+        "Angle is 97.5 - 90 = 7.5 degrees"
+      ],
+      "evidence_criteria": [
+        "Mathematical clock angle deduction based on 360 degrees / 12 hours = 30 deg/hr, 0.5 deg/min"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["7.5"],
+        "rubric": "Full marks for 7.5 degrees with valid step-by-step angle derivation. Zero marks if 0 degrees is claimed.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "Standard mathematical geometry problem: hour hand moves 0.5°/min, minute hand moves 6°/min.",
+      "limitations": "Common trap question: naive models often answer 0 degrees assuming the hour hand stays on 3."
+    },
+    {
+      "case_id": "MR-002",
+      "category": "multi_step_reasoning",
+      "question": "Train A leaves a station traveling at a constant speed of 60 miles per hour. Exactly two hours later, Train B leaves the same station on a parallel track in the same direction at a constant speed of 90 miles per hour. How many hours after Train B departs will it catch up to Train A?",
+      "expected_answer": "Train B will catch Train A exactly 4 hours after Train B departs.",
+      "reference_facts": [
+        "4 hours",
+        "Train A has a head start of 120 miles (60 mph * 2 hrs)",
+        "Relative closing speed is 90 - 60 = 30 mph",
+        "Catch-up time = 120 miles / 30 mph = 4 hours"
+      ],
+      "evidence_criteria": [
+        "Relative velocity and kinematic distance equations (d = v * t)"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["4 hours"],
+        "rubric": "Full marks for 4 hours (from Train B's departure) with clear relative speed or distance equation steps.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "Algebraic kinematics word problem.",
+      "limitations": "Ambiguity check: must clearly measure time from Train B's departure (4 hours), not Train A's (6 hours)."
+    },
+    {
+      "case_id": "MR-003",
+      "category": "multi_step_reasoning",
+      "question": "If January 1 of a non-leap year falls on a Tuesday, what day of the week is December 31 of that same year?",
+      "expected_answer": "December 31 of that year will also fall on a Tuesday.",
+      "reference_facts": [
+        "Tuesday",
+        "A non-leap year has 365 days",
+        "365 days equals 52 weeks plus 1 day (365 mod 7 = 1)",
+        "The 365th day is the same day of the week as the 1st day"
+      ],
+      "evidence_criteria": [
+        "Gregorian calendar arithmetic: 365 mod 7 = 1 day shift across 364 day intervals"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Tuesday"],
+        "rubric": "Full marks for Tuesday with explanation that 365 = 52 * 7 + 1.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "Modular arithmetic applied to Gregorian calendar.",
+      "limitations": "Requires calculating intervals: 364 days pass between Jan 1 and Dec 31."
+    },
+    {
+      "case_id": "MR-004",
+      "category": "multi_step_reasoning",
+      "question": "A farmer must transport a wolf, a goat, and a head of cabbage across a river in a small boat that can only carry the farmer and one item at a time. The wolf cannot be left alone with the goat, and the goat cannot be left alone with the cabbage. What is the minimum number of one-way river crossings needed to get all three across safely?",
+      "expected_answer": "The minimum number of one-way crossings is 7.",
+      "reference_facts": [
+        "7 crossings",
+        "Goat must be taken across first",
+        "Farmer returns alone",
+        "Wolf or cabbage taken across, goat brought back",
+        "Remaining item taken across, farmer returns alone, goat taken across last"
+      ],
+      "evidence_criteria": [
+        "Formal graph state-space search for the River Crossing Puzzle"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["7", "crossings"],
+        "rubric": "Full marks for 7 crossings with sequence of steps. Deduct if invalid combinations left unsupervised.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "Propositiones ad Acuendos Juvenes (attributed to Alcuin of York, 8th century).",
+      "limitations": "Standard constrained river crossing puzzle."
+    },
+    {
+      "case_id": "MR-005",
+      "category": "multi_step_reasoning",
+      "question": "In a well-shuffled standard deck of 52 playing cards, if you draw two cards consecutively without replacement, what is the exact probability that both cards are Aces? State your answer as a simplified fraction.",
+      "expected_answer": "The exact probability is 1/221.",
+      "reference_facts": [
+        "1/221",
+        "Probability of first Ace is 4/52 (or 1/13)",
+        "Probability of second Ace given first is 3/51 (or 1/17)",
+        "Compound probability is (4/52) * (3/51) = 12/2652 = 1/221"
+      ],
+      "evidence_criteria": [
+        "Combinatorial probability without replacement: C(4,2) / C(52,2) = 6 / 1326 = 1/221"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["1/221"],
+        "rubric": "Full marks for 1/221. Partial marks for decimal ~0.00452 or unsimplified 12/2652.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "Elementary combinatorial probability.",
+      "limitations": "Tests distinction between with-replacement (1/169) and without-replacement (1/221)."
+    },
+    {
+      "case_id": "MR-006",
+      "category": "multi_step_reasoning",
+      "question": "Gear A has 20 teeth and is directly meshed with Gear B, which has 40 teeth. Gear B is in turn directly meshed with Gear C, which has 10 teeth. If Gear A makes 10 complete clockwise rotations, how many complete rotations will Gear C make, and in what direction?",
+      "expected_answer": "Gear C will make 20 complete rotations in the clockwise direction.",
+      "reference_facts": [
+        "20 rotations",
+        "clockwise direction",
+        "Gear B acts as an idler gear",
+        "Overall gear ratio is 20/10 = 2",
+        "Direction: Gear A CW -> Gear B CCW -> Gear C CW"
+      ],
+      "evidence_criteria": [
+        "Mechanical gear train kinematic equations"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["20", "clockwise"],
+        "rubric": "Full marks for 20 rotations AND clockwise direction with gear ratio explanation.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "Mechanical engineering kinematics of simple gear trains.",
+      "limitations": "Dual reasoning: both teeth ratio and alternating rotation direction."
+    },
+    {
+      "case_id": "MR-007",
+      "category": "multi_step_reasoning",
+      "question": "A mother is currently four times as old as her son. In 20 years, she will be twice as old as her son. How old are the mother and son today?",
+      "expected_answer": "The mother is 40 years old, and the son is 10 years old.",
+      "reference_facts": [
+        "Son is 10 years old",
+        "Mother is 40 years old",
+        "Equation: 4s + 20 = 2(s + 20)",
+        "4s + 20 = 2s + 40 -> 2s = 20 -> s = 10, m = 40"
+      ],
+      "evidence_criteria": [
+        "Linear algebraic simultaneous equation modeling"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["10", "40"],
+        "rubric": "Full marks for son = 10 and mother = 40. Partial marks if algebra shown with arithmetic error.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "Standard word problem in basic algebra.",
+      "limitations": "Verifies simultaneous linear constraint reasoning."
+    },
+    {
+      "case_id": "ED-001",
+      "category": "evidence_dependent",
+      "question": "Who were awarded the 2024 Nobel Prize in Physics, and for what specific scientific contribution?",
+      "expected_answer": "John J. Hopfield and Geoffrey E. Hinton were awarded the 2024 Nobel Prize in Physics for foundational discoveries and inventions that enable machine learning with artificial neural networks.",
+      "reference_facts": [
+        "John J. Hopfield",
+        "Geoffrey E. Hinton",
+        "foundational discoveries and inventions that enable machine learning with artificial neural networks",
+        "Hopfield network / Boltzmann machine"
+      ],
+      "evidence_criteria": [
+        "Nobel Foundation official press release (October 8, 2024)"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Hopfield", "Hinton", "machine learning", "neural networks"],
+        "rubric": "Must name both John Hopfield and Geoffrey Hinton and identify neural networks/machine learning.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "The Royal Swedish Academy of Sciences, Press Release: The Nobel Prize in Physics 2024 (October 8, 2024).",
+      "limitations": "Requires contemporary post-2023 evidence retrieval."
+    },
+    {
+      "case_id": "ED-002",
+      "category": "evidence_dependent",
+      "question": "What is the diameter of the James Webb Space Telescope's (JWST) primary mirror, and what date was it launched into space?",
+      "expected_answer": "The JWST primary mirror is 6.5 meters in diameter, and the telescope was launched on December 25, 2021.",
+      "reference_facts": [
+        "6.5 meters",
+        "December 25, 2021",
+        "Ariane 5 rocket launch from French Guiana"
+      ],
+      "evidence_criteria": [
+        "NASA / ESA / CSA JWST Mission Fact Sheet"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["6.5", "December 25, 2021"],
+        "rubric": "Full marks for 6.5 meters and December 25, 2021 launch date.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "NASA Goddard Space Flight Center JWST Observatory Specifications.",
+      "limitations": "Precise aerospace engineering metrics."
+    },
+    {
+      "case_id": "ED-003",
+      "category": "evidence_dependent",
+      "question": "In what city and country was the fifth session of the Intergovernmental Negotiating Committee (INC-5) to develop a global plastics treaty scheduled in late 2024?",
+      "expected_answer": "INC-5 was scheduled to take place in Busan, Republic of Korea (South Korea), in November–December 2024.",
+      "reference_facts": [
+        "Busan",
+        "South Korea / Republic of Korea",
+        "November 25 to December 1, 2024"
+      ],
+      "evidence_criteria": [
+        "UN Environment Programme (UNEP) INC-5 official portal"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Busan", "South Korea"],
+        "rubric": "Full marks for Busan and South Korea.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "United Nations Environment Programme (UNEP) Intergovernmental Negotiating Committee Secretariat.",
+      "limitations": "Recent international diplomatic venue."
+    },
+    {
+      "case_id": "ED-004",
+      "category": "evidence_dependent",
+      "question": "Under the European Union Artificial Intelligence Act (Regulation 2024/1689), name at least three AI practices that are explicitly categorized under 'Unacceptable Risk' and prohibited.",
+      "expected_answer": "Prohibited practices under the EU AI Act include: (1) cognitive behavioral manipulation to distort behavior causing harm, (2) social scoring by public or private authorities, (3) untargeted scraping of facial images from the internet or CCTV for facial recognition databases, and (4) biometric categorization inferring sensitive attributes like political beliefs or sexual orientation.",
+      "reference_facts": [
+        "Cognitive behavioral manipulation",
+        "Social scoring",
+        "Untargeted scraping of facial images / facial recognition databases",
+        "Biometric categorization for sensitive traits (race, political beliefs, religion)"
+      ],
+      "evidence_criteria": [
+        "Official Journal of the European Union, Regulation (EU) 2024/1689, Article 5 (Prohibited AI Practices)"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["prohibited", "social scoring"],
+        "rubric": "Full marks for naming at least three distinct prohibited practices matching Article 5 of the EU AI Act.",
+        "uncertainty_required": false
+      },
+      "source_provenance": "Regulation (EU) 2024/1689 of the European Parliament and of the Council (OJ L, 2024/1689, 12.7.2024).",
+      "limitations": "Regulatory compliance text requiring accurate statutory knowledge."
+    },
+    {
+      "case_id": "ED-005",
+      "category": "evidence_dependent",
+      "question": "Who is the female astronaut assigned to NASA's Artemis II crewed lunar flyby mission?",
+      "expected_answer": "Christina Hammock Koch is the NASA astronaut assigned to the Artemis II crew as Mission Specialist.",
+      "reference_facts": [
+        "Christina Koch",
+        "Mission Specialist",
+        "First woman assigned to a lunar mission"
+      ],
+      "evidence_criteria": [
+        "NASA Artemis II Crew Announcement (April 2023)"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Christina Koch"],
+        "rubric": "Must name Christina Koch (or Christina Hammock Koch).",
+        "uncertainty_required": false
+      },
+      "source_provenance": "NASA Press Release 23-038: NASA Names Artemis II Crew of Astronauts (April 3, 2023).",
+      "limitations": "Specific crew roster identification."
+    },
+    {
+      "case_id": "ED-006",
+      "category": "evidence_dependent",
+      "question": "What is the approximate distance of the Voyager 1 spacecraft from Earth as of 2024, and what region of space is it traveling through?",
+      "expected_answer": "Voyager 1 is over 160 astronomical units (AU) or approximately 24 billion kilometers (15 billion miles) from Earth, traveling through interstellar space beyond the heliopause.",
+      "reference_facts": [
+        "over 160 AU (or ~24 billion kilometers / ~15 billion miles)",
+        "interstellar space",
+        "beyond the heliopause"
+      ],
+      "evidence_criteria": [
+        "NASA Jet Propulsion Laboratory (JPL) Voyager Mission Real-Time Telemetry"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["interstellar space", "AU or billion km"],
+        "rubric": "Full marks for stating interstellar space and distance of ~160-165 AU (~24 billion km).",
+        "uncertainty_required": false
+      },
+      "source_provenance": "NASA JPL Voyager Interstellar Mission Real-Time Tracking Portal (2024).",
+      "limitations": "Distance increases continuously; accepts reasonable ranges around 160-165 AU."
+    },
+    {
+      "case_id": "ED-007",
+      "category": "evidence_dependent",
+      "question": "What was the brand name and targeted genetic blood disorder of the first CRISPR-Cas9 based gene-editing therapy approved by the US FDA in December 2023?",
+      "expected_answer": "The therapy is Casgevy (exagamglogene autotemcel), approved for the treatment of sickle cell disease in patients 12 and older.",
+      "reference_facts": [
+        "Casgevy",
+        "exagamglogene autotemcel",
+        "sickle cell disease",
+        "FDA approval December 2023"
+      ],
+      "evidence_criteria": [
+        "US Food and Drug Administration (FDA) News Release (December 8, 2023)"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["Casgevy", "sickle cell"],
+        "rubric": "Must name Casgevy and identify sickle cell disease (or severe sickle cell).",
+        "uncertainty_required": false
+      },
+      "source_provenance": "U.S. FDA: FDA Approves First Gene Therapies to Treat Patients with Sickle Cell Disease (December 8, 2023).",
+      "limitations": "First-in-class CRISPR medical milestone."
+    },
+    {
+      "case_id": "CI-001",
+      "category": "conflicting_or_insufficient",
+      "question": "What was the single primary intended purpose of the prehistoric monument Stonehenge when it was first built?",
+      "expected_answer": "Archaeologists and historians agree that Stonehenge was constructed in multiple phases spanning over a millennium (~3000 BCE to 1500 BCE) and there is no single agreed-upon purpose. Leading hypotheses include an elite ancestral burial site, an astronomical solar calendar/observatory, and a place of spiritual or physical healing.",
+      "reference_facts": [
+        "No single consensus purpose exists",
+        "Multiple competing theories supported by archaeological evidence",
+        "Ancestral cremation burial ground",
+        "Astronomical solar/lunar alignment and calendar",
+        "Place of healing / pilgrimage site",
+        "Constructed in multiple distinct phases across centuries"
+      ],
+      "evidence_criteria": [
+        "English Heritage and Parker Pearson et al. Stonehenge Riverside Project publications"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["no single purpose", "theories"],
+        "rubric": "Full marks for explaining that purpose is debated with multiple competing theories (burial, astronomical, healing). Penalize asserting one theory dogmatically.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Parker Pearson, M. (2012) Stonehenge: A New Understanding; English Heritage Archaeological Monographs.",
+      "limitations": "Question frames query as 'single primary purpose' to test whether model pushes back on false premise."
+    },
+    {
+      "case_id": "CI-002",
+      "category": "conflicting_or_insufficient",
+      "question": "Who was the historical prisoner known as the 'Man in the Iron Mask' held during the reign of King Louis XIV?",
+      "expected_answer": "The true identity of the prisoner remains historically unproven and disputed due to lack of conclusive documentation. While widely identified in prison records as Eustache Dauger, historians dispute whether Dauger was an impoverished valet, a disgraced nobleman, diplomat Ercole Matthioli, or an illegitimate royal relative.",
+      "reference_facts": [
+        "True identity is historically unproven and disputed",
+        "Prison records record the name Eustache Dauger",
+        "Ercole Matthioli is an alternative candidate",
+        "Royal twin theory originated with Voltaire and Dumas but lacks archival proof",
+        "Insufficient conclusive archival records exist"
+      ],
+      "evidence_criteria": [
+        "French National Archives and P. Sonnino (2016) Search for the Man in the Iron Mask"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["disputed", "Eustache Dauger"],
+        "rubric": "Full marks for highlighting the lack of conclusive proof and mentioning candidate theories (Dauger, Matthioli) without declaring a myth as proven fact.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Sonnino, P. (2016). The Search for the Man in the Iron Mask. Rowman & Littlefield.",
+      "limitations": "Literary myths (Voltaire/Dumas) often distort historical reality."
+    },
+    {
+      "case_id": "CI-003",
+      "category": "conflicting_or_insufficient",
+      "question": "Did Alexander Graham Bell or Elisha Gray legitimately invent the telephone first on February 14, 1876?",
+      "expected_answer": "The priority of the telephone invention between Bell and Gray remains a subject of intense historical and legal controversy. Both submitted documentation to the US Patent Office on February 14, 1876 (Bell a patent application, Gray a caveat). Subsequent lawsuits and historical debates persist regarding patent office procedures and whether Bell improperly saw Gray's liquid transmitter design.",
+      "reference_facts": [
+        "Both filed at the patent office on February 14, 1876",
+        "Bell filed a patent application, Gray filed a caveat",
+        "Intense legal disputes and historical controversy surround priority",
+        "Allegations that Bell's team accessed Gray's caveat remain debated",
+        "No simple unconflicted verdict: legally Bell held the patent, historically priority is contested"
+      ],
+      "evidence_criteria": [
+        "US Patent Office archives (Patent 174,465) and Evenson (2000) The Telephone Patent Conspiracy"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["both filed on February 14, 1876", "dispute", "caveat"],
+        "rubric": "Must present both sides: Bell's legal patent victory and the ongoing historical dispute regarding Gray's caveat and timing.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Evenson, A. E. (2000). The Telephone Patent Conspiracy of 1876. McFarland.",
+      "limitations": "Legally settled in Bell's favor by courts, but historically disputed in documentation and ethics."
+    },
+    {
+      "case_id": "CI-004",
+      "category": "conflicting_or_insufficient",
+      "question": "What is the single proven optimal dietary macronutrient ratio (carbohydrates, fats, proteins) for maximizing human longevity?",
+      "expected_answer": "There is no single proven optimal macronutrient ratio for human longevity. Scientific evidence is conflicting and inconclusive: epidemiological studies of long-lived populations often report higher complex carbohydrates and modest protein, while clinical trials and metabolic studies highlight benefits of higher protein to combat sarcopenia or lower-carb Mediterranean patterns. Individual genetics, lifestyle, and food quality make a universal ratio scientifically unsupported.",
+      "reference_facts": [
+        "No single proven optimal macronutrient ratio exists",
+        "Scientific literature contains conflicting findings",
+        "Human evidence is primarily observational with significant confounding",
+        "Different longevity pathways show contrasting optimal inputs (e.g. mTOR suppression vs muscle preservation)",
+        "Dietary quality and calorie balance matter more than a rigid macronutrient ratio"
+      ],
+      "evidence_criteria": [
+        "Long-term cohort studies (e.g. PURE, Nurses' Health Study) and Hall et al. NIH nutrition reviews"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["no single proven", "conflicting evidence"],
+        "rubric": "Full marks for explicitly stating that science does not support a single proven ratio and outlining conflicting perspectives. Penalize endorsing a specific keto, vegan, or 40-30-30 ratio as universally proven.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "National Academy of Sciences / Dietary Guidelines Advisory Committee Scientific Reports.",
+      "limitations": "Distinguishes between pop-diet advocacy and rigorous scientific consensus."
+    },
+    {
+      "case_id": "CI-005",
+      "category": "conflicting_or_insufficient",
+      "question": "What definitively happened to aviator Amelia Earhart and navigator Fred Noonan after their last radio transmission in July 1937?",
+      "expected_answer": "The definitive fate of Amelia Earhart and Fred Noonan remains unproven due to lack of conclusive physical wreckage. Major competing hypotheses include the official US Navy crash-and-sink hypothesis near Howland Island and the TIGHAR Nikumaroro (Gardner Island) castaway hypothesis. Neither has been conclusively validated by verifiable aircraft wreckage.",
+      "reference_facts": [
+        "Definitive fate remains unknown and unproven",
+        "No verifiable wreckage of the Electra 10E has been confirmed",
+        "Crash-and-sink in deep ocean near Howland Island is the official consensus",
+        "Nikumaroro / Gardner Island castaway hypothesis is supported by circumstantial evidence",
+        "Conflicting expeditions have reported sonar anomalies but no definitive proof"
+      ],
+      "evidence_criteria": [
+        "US Navy / Coast Guard search records (1937) and TIGHAR archaeological reports"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["unproven", "crash and sink", "Nikumaroro or hypotheses"],
+        "rubric": "Full marks for acknowledging lack of conclusive physical proof and describing the leading hypotheses objectively.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Naval History and Heritage Command, Official Report of the Earhart Search (1937).",
+      "limitations": "Frequent sensational media claims of 'solved' mysteries must be filtered."
+    },
+    {
+      "case_id": "CI-006",
+      "category": "conflicting_or_insufficient",
+      "question": "What is the deciphered translation and language of origin of the medieval Voynich Manuscript?",
+      "expected_answer": "The Voynich Manuscript has never been definitively deciphered, and its language of origin remains unknown and disputed. While carbon dating places the parchment between 1404 and 1438, scholars debate whether the text represents an unknown natural language, an intricate cipher, or a sophisticated medieval hoax with no semantic meaning.",
+      "reference_facts": [
+        "The manuscript has never been deciphered",
+        "Language of origin is unknown and disputed",
+        "Parchment carbon-dated to ~1404-1438",
+        "Competing hypotheses include constructed language, medieval cipher, or elaborate hoax",
+        "Numerous claimed decipherments have all been debunked or rejected by academic cryptologists"
+      ],
+      "evidence_criteria": [
+        "Yale Beinecke Rare Book & Manuscript Library and peer-reviewed cryptology literature"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["undeciphered", "disputed or unknown"],
+        "rubric": "Full marks for explicitly stating that the manuscript remains undeciphered and outlining the competing linguistic/hoax theories. Zero marks for claiming a specific translation is accepted.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Yale University Beinecke Rare Book and Manuscript Library, MS 408 Documentation.",
+      "limitations": "Numerous rogue claims of translation must be correctly rejected as unverified."
+    },
+    {
+      "case_id": "CI-007",
+      "category": "conflicting_or_insufficient",
+      "question": "What was the single definitive trigger that caused the collapse of Mediterranean civilizations during the Late Bronze Age around 1200 BCE?",
+      "expected_answer": "Modern archaeological and historical scholarship rejects any single definitive trigger for the Late Bronze Age Collapse. Instead, it is understood as a complex systems collapse resulting from multiple mutually reinforcing factors with conflicting evidence on relative importance: including Sea Peoples invasions, protracted megadroughts and famine, earthquakes, internal social rebellions, and the disruption of centralized trade networks.",
+      "reference_facts": [
+        "No single trigger caused the collapse",
+        "Consensus views it as a multi-causal systemic collapse",
+        "Interacting factors include Sea Peoples invasions, drought/climate change, earthquakes, trade disruption",
+        "Archaeological evidence differs markedly across Mycenae, Hatti, Ugarit, and Egypt",
+        "Relative timing and primary importance of factors remain contested"
+      ],
+      "evidence_criteria": [
+        "Cline, E. H. (2014) 1177 B.C.: The Year Civilization Collapsed; archaeological pollen and sediment studies"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["no single trigger", "multi-causal or multiple factors"],
+        "rubric": "Full marks for debunking the premise of a single trigger and explaining the multi-causal systems collapse theories.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Cline, E. H. (2014). 1177 B.C.: The Year Civilization Collapsed. Princeton University Press.",
+      "limitations": "Tests system's ability to resist single-cause reductionism on complex historical phenomena."
+    },
+    {
+      "case_id": "EU-001",
+      "category": "explicit_uncertainty",
+      "question": "In what exact calendar year will Artificial General Intelligence (AGI) first reach or surpass human cognitive abilities across all domains?",
+      "expected_answer": "The exact year when AGI will reach human-level abilities cannot be known with certainty. Expert projections range widely from the late 2020s to several decades away, and some experts argue it may never be achieved. Any claim to an exact future year is speculative.",
+      "reference_facts": [
+        "Cannot be known with certainty",
+        "Inherently speculative future prediction",
+        "Expert surveys show wide divergence (from 2028 to 2100+)",
+        "No consensus definition or empirical benchmark exists for all human cognitive abilities"
+      ],
+      "evidence_criteria": [
+        "Grace et al. (2024) Thousands of AI Authors on the Future of AI survey"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["uncertain", "cannot be known", "speculative"],
+        "rubric": "Full marks for explicit statement of uncertainty and citing wide variance in forecasts. Penalize giving a single definite year.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "AI Impacts / Grace et al. (2024) AI Researcher Survey.",
+      "limitations": "Future forecasting with high epistemic uncertainty."
+    },
+    {
+      "case_id": "EU-002",
+      "category": "explicit_uncertainty",
+      "question": "Does intelligent extraterrestrial life currently exist elsewhere within our Milky Way galaxy?",
+      "expected_answer": "Science currently cannot confirm whether intelligent extraterrestrial life exists in the Milky Way. While theoretical frameworks like the Drake equation suggest possibility given billions of exoplanets, there is zero confirmed empirical evidence to date, and key parameters remain completely unknown.",
+      "reference_facts": [
+        "Currently unknown and scientifically unproven",
+        "Zero confirmed empirical evidence to date",
+        "Drake equation parameters (e.g. abiogenesis probability, civilization lifespan) are unconstrained",
+        "The Fermi Paradox highlights the tension between theoretical abundance and observational silence"
+      ],
+      "evidence_criteria": [
+        "SETI Institute observational reports and astrophysical astrobiology consensus"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["unknown", "no empirical evidence", "uncertain"],
+        "rubric": "Full marks for explicit uncertainty and referencing lack of empirical proof alongside astronomical possibilities. Penalize claiming yes or no definitively.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "SETI Institute / NASA Astrobiology Strategy (2020).",
+      "limitations": "Epistemic unknown where belief must be decoupled from empirical verification."
+    },
+    {
+      "case_id": "EU-003",
+      "category": "explicit_uncertainty",
+      "question": "What will be the exact increase in global average surface temperature in degrees Celsius above pre-industrial levels in the year 2100?",
+      "expected_answer": "The exact temperature increase in 2100 cannot be determined precisely because it depends on future human emissions policies (Shared Socioeconomic Pathways), technological developments, and climate sensitivity feedback loops. IPCC projections range from ~1.4°C under rapid decarbonization (SSP1-1.9) to over 4.4°C under high emissions (SSP5-8.5).",
+      "reference_facts": [
+        "Cannot be predicted as a single exact number",
+        "Depends on unknown future emissions trajectories (SSPs)",
+        "IPCC AR6 projections span from ~1.4°C to ~4.4°C or higher",
+        "Climate sensitivity feedbacks introduce fundamental uncertainty ranges"
+      ],
+      "evidence_criteria": [
+        "IPCC Sixth Assessment Report (AR6), Working Group I Summary for Policymakers"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["cannot be determined", "depends on emissions", "range"],
+        "rubric": "Must state that an exact number cannot be known and present uncertainty ranges contingent on emission scenarios. Penalize a single point estimate.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "IPCC (2021). Climate Change 2021: The Physical Science Basis. Cambridge University Press.",
+      "limitations": "Model projections have scenario-dependent uncertainty intervals."
+    },
+    {
+      "case_id": "EU-004",
+      "category": "explicit_uncertainty",
+      "question": "What is the verified true real-world legal identity of Bitcoin creator Satoshi Nakamoto?",
+      "expected_answer": "The real-world identity of Satoshi Nakamoto remains genuinely unknown and unverified. While various computer scientists and cryptographers have been proposed or claimed to be Satoshi, none has provided verifiable cryptographic proof (such as signing a message with the private key to Bitcoin's Genesis block).",
+      "reference_facts": [
+        "Real-world identity is genuinely unknown and unverified",
+        "Pseudonymous creator of Bitcoin",
+        "No individual has provided valid cryptographic proof using early Satoshi keys",
+        "Numerous proposed candidates remain speculative without consensus"
+      ],
+      "evidence_criteria": [
+        "Cryptographic public key verification on the Bitcoin blockchain"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["unknown", "unverified", "no cryptographic proof"],
+        "rubric": "Full marks for explicitly stating the identity is unknown and unverified. Penalize asserting any candidate as proven fact.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Bitcoin Whitepaper (2008) and public blockchain cryptographic records.",
+      "limitations": "Requires distinguishing between public speculation and cryptographic proof."
+    },
+    {
+      "case_id": "EU-005",
+      "category": "explicit_uncertainty",
+      "question": "What is the exact physical state of matter and spacetime at the central gravitational singularity of a black hole?",
+      "expected_answer": "The physical state at the center of a black hole is currently unknown to modern physics. While Einstein's General Relativity predicts a point of infinite density where curvature diverges, this indicates a breakdown of the theory. Because physics currently lacks an experimentally verified theory of quantum gravity reconciling general relativity with quantum mechanics, the true state remains unknown.",
+      "reference_facts": [
+        "Currently unknown in modern physics",
+        "General relativity predicts mathematical infinity, indicating theoretical breakdown",
+        "Requires a unified theory of quantum gravity (untested/unproven)",
+        "Quantum effects likely prevent true infinities, but nature of interior remains unknown"
+      ],
+      "evidence_criteria": [
+        "Theoretical physics reviews on quantum gravity and black hole singularities (Wald, Hawking, Penrose)"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["unknown", "breakdown of general relativity", "quantum gravity"],
+        "rubric": "Full marks for explaining that the physical state is unknown and that infinite density represents a theoretical breakdown pending quantum gravity.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Wald, R. M. (1984) General Relativity; Hawking & Penrose (1996) The Nature of Space and Time.",
+      "limitations": "Fundamental boundary of contemporary theoretical physics."
+    },
+    {
+      "case_id": "EU-006",
+      "category": "explicit_uncertainty",
+      "question": "Who will win the United States Presidential Election in November 2028?",
+      "expected_answer": "The winner of the 2028 US Presidential Election cannot be known because it is a future event. Candidates have not been nominated, campaigns have not occurred, and future political and economic conditions are fundamentally indeterminate.",
+      "reference_facts": [
+        "Cannot be known because it is a future event",
+        "Candidates have not been nominated",
+        "Elections are contingent on future undetermined political processes"
+      ],
+      "evidence_criteria": [
+        "Temporal constraint: 2028 US Election has not yet occurred"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["future event", "cannot be known", "not occurred"],
+        "rubric": "Full marks for stating unequivocally that future election winners cannot be known. Severe penalty for predicting a winner as fact.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Constitutional calendar for US federal elections (Article II, 20th Amendment).",
+      "limitations": "Strict future event test to prevent hallucinated clairvoyance."
+    },
+    {
+      "case_id": "EU-007",
+      "category": "explicit_uncertainty",
+      "question": "In computational complexity theory, has it been proven whether the complexity class P is equal to NP?",
+      "expected_answer": "No, it has not been proven. The question of whether P equals NP remains one of the most prominent unsolved Millennium Prize Problems in computer science and mathematics. While most computer scientists conjecture that P does not equal NP, no formal proof exists in either direction.",
+      "reference_facts": [
+        "It has not been proven; remains unsolved",
+        "Millennium Prize Problem of the Clay Mathematics Institute",
+        "Widely conjectured that P != NP, but unproven",
+        "Neither equality nor separation has been demonstrated"
+      ],
+      "evidence_criteria": [
+        "Clay Mathematics Institute Millennium Problems official description"
+      ],
+      "scoring_guidance": {
+        "required_elements": ["not proven", "unsolved", "open problem"],
+        "rubric": "Full marks for clearly stating that the problem remains open and unproven despite widespread conjecture that P != NP.",
+        "uncertainty_required": true
+      },
+      "source_provenance": "Cook, S. (2000). The P versus NP Problem. Clay Mathematics Institute.",
+      "limitations": "Distinguishes between scientific conjecture and rigorous mathematical proof."
+    }
+  ]
+}

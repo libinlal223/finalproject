@@ -1,0 +1,2849 @@
+{
+  "metadata": {
+    "run_id": "eval-8ce817ea",
+    "timestamp": "2026-10-16T04:16:39.952467Z",
+    "dataset_version": "1.0.0",
+    "provider": "mock",
+    "model_id": "mock-model-v1",
+    "llm_config": {
+      "temperature": 0.3,
+      "max_tokens": 2048,
+      "timeout_seconds": 60
+    },
+    "max_rounds": 2,
+    "is_mock": true,
+    "resumed_from": null
+  },
+  "category_summaries": [
+    {
+      "category": "verifiable_fact",
+      "count": 7,
+      "baseline_mean_correctness": 0.0,
+      "vader_mean_correctness": 0.0,
+      "baseline_mean_completeness": 0.0,
+      "vader_mean_completeness": 0.071,
+      "baseline_mean_uncertainty": 1.0,
+      "vader_mean_uncertainty": 1.0,
+      "baseline_mean_latency_ms": 14.7,
+      "vader_mean_latency_ms": 597.7,
+      "baseline_mean_calls": 1.0,
+      "vader_mean_calls": 9.0,
+      "baseline_failures": 0,
+      "vader_failures": 0
+    },
+    {
+      "category": "multi_step_reasoning",
+      "count": 7,
+      "baseline_mean_correctness": 0.0,
+      "vader_mean_correctness": 0.0,
+      "baseline_mean_completeness": 0.0,
+      "vader_mean_completeness": 0.0,
+      "baseline_mean_uncertainty": 1.0,
+      "vader_mean_uncertainty": 1.0,
+      "baseline_mean_latency_ms": 14.8,
+      "vader_mean_latency_ms": 179.5,
+      "baseline_mean_calls": 1.0,
+      "vader_mean_calls": 9.0,
+      "baseline_failures": 0,
+      "vader_failures": 0
+    },
+    {
+      "category": "evidence_dependent",
+      "count": 7,
+      "baseline_mean_correctness": 0.0,
+      "vader_mean_correctness": 0.0,
+      "baseline_mean_completeness": 0.0,
+      "vader_mean_completeness": 0.0,
+      "baseline_mean_uncertainty": 1.0,
+      "vader_mean_uncertainty": 1.0,
+      "baseline_mean_latency_ms": 15.3,
+      "vader_mean_latency_ms": 166.5,
+      "baseline_mean_calls": 1.0,
+      "vader_mean_calls": 9.0,
+      "baseline_failures": 0,
+      "vader_failures": 0
+    },
+    {
+      "category": "conflicting_or_insufficient",
+      "count": 7,
+      "baseline_mean_correctness": 0.0,
+      "vader_mean_correctness": 0.0,
+      "baseline_mean_completeness": 0.0,
+      "vader_mean_completeness": 0.0,
+      "baseline_mean_uncertainty": 0.15,
+      "vader_mean_uncertainty": 0.15,
+      "baseline_mean_latency_ms": 14.9,
+      "vader_mean_latency_ms": 161.7,
+      "baseline_mean_calls": 1.0,
+      "vader_mean_calls": 9.0,
+      "baseline_failures": 0,
+      "vader_failures": 0
+    },
+    {
+      "category": "explicit_uncertainty",
+      "count": 7,
+      "baseline_mean_correctness": 0.0,
+      "vader_mean_correctness": 0.0,
+      "baseline_mean_completeness": 0.0,
+      "vader_mean_completeness": 0.0,
+      "baseline_mean_uncertainty": 0.15,
+      "vader_mean_uncertainty": 0.15,
+      "baseline_mean_latency_ms": 17.0,
+      "vader_mean_latency_ms": 162.5,
+      "baseline_mean_calls": 1.0,
+      "vader_mean_calls": 9.0,
+      "baseline_failures": 0,
+      "vader_failures": 0
+    }
+  ],
+  "aggregate_metrics": {
+    "total_cases": 35,
+    "baseline_failures": 0,
+    "vader_failures": 0,
+    "baseline_mean_latency_ms": 15.3,
+    "baseline_median_latency_ms": 14.5,
+    "vader_mean_latency_ms": 253.6,
+    "vader_median_latency_ms": 170.2,
+    "latency_paired_diff_mean_ms": 238.2,
+    "baseline_mean_correctness": 0.0,
+    "vader_mean_correctness": 0.0,
+    "correctness_paired_diff_mean": 0.0,
+    "baseline_mean_completeness": 0.0,
+    "vader_mean_completeness": 0.014,
+    "baseline_mean_uncertainty": 0.66,
+    "vader_mean_uncertainty": 0.66,
+    "baseline_total_calls": 35,
+    "vader_total_calls": 315,
+    "tokens_available": false,
+    "baseline_total_tokens": null,
+    "vader_total_tokens": null,
+    "cost_available": false,
+    "baseline_total_cost_usd": null,
+    "vader_total_cost_usd": null
+  },
+  "case_comparisons": [
+    {
+      "case_id": "VF-001",
+      "category": "verifiable_fact",
+      "question": "What is the exact speed of light in a vacuum in meters per second according to the International System of Units (SI)?",
+      "baseline_result": {
+        "case_id": "VF-001",
+        "system_id": "baseline",
+        "query": "What is the exact speed of light in a vacuum in meters per second according to the International System of Units (SI)?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 20.8,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "VF-001",
+        "system_id": "vader",
+        "query": "What is the exact speed of light in a vacuum in meters per second according to the International System of Units (SI)?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 3197.67,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "VF-001",
+        "system_id": "baseline",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "VF-001",
+        "system_id": "vader",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "VF-002",
+      "category": "verifiable_fact",
+      "question": "What is the federal capital city of Australia?",
+      "baseline_result": {
+        "case_id": "VF-002",
+        "system_id": "baseline",
+        "query": "What is the federal capital city of Australia?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 13.72,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "VF-002",
+        "system_id": "vader",
+        "query": "What is the federal capital city of Australia?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 174.86,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "VF-002",
+        "system_id": "baseline",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "VF-002",
+        "system_id": "vader",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "VF-003",
+      "category": "verifiable_fact",
+      "question": "Which chemical element has atomic number 79 and what is its standard chemical symbol?",
+      "baseline_result": {
+        "case_id": "VF-003",
+        "system_id": "baseline",
+        "query": "Which chemical element has atomic number 79 and what is its standard chemical symbol?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 11.16,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "VF-003",
+        "system_id": "vader",
+        "query": "Which chemical element has atomic number 79 and what is its standard chemical symbol?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 140.45,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "VF-003",
+        "system_id": "baseline",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "VF-003",
+        "system_id": "vader",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.5,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.475,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 1/2 (0.50)"
+        ]
+      }
+    },
+    {
+      "case_id": "VF-004",
+      "category": "verifiable_fact",
+      "question": "Who was the first human to travel into outer space, and in what year did this flight take place?",
+      "baseline_result": {
+        "case_id": "VF-004",
+        "system_id": "baseline",
+        "query": "Who was the first human to travel into outer space, and in what year did this flight take place?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 17.78,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "VF-004",
+        "system_id": "vader",
+        "query": "Who was the first human to travel into outer space, and in what year did this flight take place?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 156.0,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "VF-004",
+        "system_id": "baseline",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "VF-004",
+        "system_id": "vader",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "VF-005",
+      "category": "verifiable_fact",
+      "question": "What is the name of the deepest known point in Earth's oceans, and in which oceanic trench is it located?",
+      "baseline_result": {
+        "case_id": "VF-005",
+        "system_id": "baseline",
+        "query": "What is the name of the deepest known point in Earth's oceans, and in which oceanic trench is it located?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 11.03,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "VF-005",
+        "system_id": "vader",
+        "query": "What is the name of the deepest known point in Earth's oceans, and in which oceanic trench is it located?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 154.64,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "VF-005",
+        "system_id": "baseline",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "VF-005",
+        "system_id": "vader",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "VF-006",
+      "category": "verifiable_fact",
+      "question": "Which planet in the Solar System currently holds the record for the most recognized natural satellites (moons)?",
+      "baseline_result": {
+        "case_id": "VF-006",
+        "system_id": "baseline",
+        "query": "Which planet in the Solar System currently holds the record for the most recognized natural satellites (moons)?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 13.39,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "VF-006",
+        "system_id": "vader",
+        "query": "Which planet in the Solar System currently holds the record for the most recognized natural satellites (moons)?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 172.8,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "VF-006",
+        "system_id": "baseline",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "VF-006",
+        "system_id": "vader",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "VF-007",
+      "category": "verifiable_fact",
+      "question": "Who authored the 1818 gothic novel Frankenstein; or, The Modern Prometheus?",
+      "baseline_result": {
+        "case_id": "VF-007",
+        "system_id": "baseline",
+        "query": "Who authored the 1818 gothic novel Frankenstein; or, The Modern Prometheus?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 14.76,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "VF-007",
+        "system_id": "vader",
+        "query": "Who authored the 1818 gothic novel Frankenstein; or, The Modern Prometheus?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 187.18,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "VF-007",
+        "system_id": "baseline",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/2 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "VF-007",
+        "system_id": "vader",
+        "category": "verifiable_fact",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/2 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "MR-001",
+      "category": "multi_step_reasoning",
+      "question": "On a standard analog 12-hour clock, what is the exact smaller angle in degrees between the hour hand and the minute hand at 3:15?",
+      "baseline_result": {
+        "case_id": "MR-001",
+        "system_id": "baseline",
+        "query": "On a standard analog 12-hour clock, what is the exact smaller angle in degrees between the hour hand and the minute hand at 3:15?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 14.3,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "MR-001",
+        "system_id": "vader",
+        "query": "On a standard analog 12-hour clock, what is the exact smaller angle in degrees between the hour hand and the minute hand at 3:15?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 171.12,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "MR-001",
+        "system_id": "baseline",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "MR-001",
+        "system_id": "vader",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "MR-002",
+      "category": "multi_step_reasoning",
+      "question": "Train A leaves a station traveling at a constant speed of 60 miles per hour. Exactly two hours later, Train B leaves the same station on a parallel track in the same direction at a constant speed of 90 miles per hour. How many hours after Train B departs will it catch up to Train A?",
+      "baseline_result": {
+        "case_id": "MR-002",
+        "system_id": "baseline",
+        "query": "Train A leaves a station traveling at a constant speed of 60 miles per hour. Exactly two hours later, Train B leaves the same station on a parallel track in the same direction at a constant speed of 90 miles per hour. How many hours after Train B departs will it catch up to Train A?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 13.37,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "MR-002",
+        "system_id": "vader",
+        "query": "Train A leaves a station traveling at a constant speed of 60 miles per hour. Exactly two hours later, Train B leaves the same station on a parallel track in the same direction at a constant speed of 90 miles per hour. How many hours after Train B departs will it catch up to Train A?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 188.07,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "MR-002",
+        "system_id": "baseline",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "MR-002",
+        "system_id": "vader",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "MR-003",
+      "category": "multi_step_reasoning",
+      "question": "If January 1 of a non-leap year falls on a Tuesday, what day of the week is December 31 of that same year?",
+      "baseline_result": {
+        "case_id": "MR-003",
+        "system_id": "baseline",
+        "query": "If January 1 of a non-leap year falls on a Tuesday, what day of the week is December 31 of that same year?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 18.29,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "MR-003",
+        "system_id": "vader",
+        "query": "If January 1 of a non-leap year falls on a Tuesday, what day of the week is December 31 of that same year?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 200.07,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "MR-003",
+        "system_id": "baseline",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "MR-003",
+        "system_id": "vader",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "MR-004",
+      "category": "multi_step_reasoning",
+      "question": "A farmer must transport a wolf, a goat, and a head of cabbage across a river in a small boat that can only carry the farmer and one item at a time. The wolf cannot be left alone with the goat, and the goat cannot be left alone with the cabbage. What is the minimum number of one-way river crossings needed to get all three across safely?",
+      "baseline_result": {
+        "case_id": "MR-004",
+        "system_id": "baseline",
+        "query": "A farmer must transport a wolf, a goat, and a head of cabbage across a river in a small boat that can only carry the farmer and one item at a time. The wolf cannot be left alone with the goat, and the goat cannot be left alone with the cabbage. What is the minimum number of one-way river crossings needed to get all three across safely?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 12.25,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "MR-004",
+        "system_id": "vader",
+        "query": "A farmer must transport a wolf, a goat, and a head of cabbage across a river in a small boat that can only carry the farmer and one item at a time. The wolf cannot be left alone with the goat, and the goat cannot be left alone with the cabbage. What is the minimum number of one-way river crossings needed to get all three across safely?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 188.04,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "MR-004",
+        "system_id": "baseline",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "MR-004",
+        "system_id": "vader",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "MR-005",
+      "category": "multi_step_reasoning",
+      "question": "In a well-shuffled standard deck of 52 playing cards, if you draw two cards consecutively without replacement, what is the exact probability that both cards are Aces? State your answer as a simplified fraction.",
+      "baseline_result": {
+        "case_id": "MR-005",
+        "system_id": "baseline",
+        "query": "In a well-shuffled standard deck of 52 playing cards, if you draw two cards consecutively without replacement, what is the exact probability that both cards are Aces? State your answer as a simplified fraction.",
+        "answer": "Mock LLM response.",
+        "latency_ms": 13.7,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "MR-005",
+        "system_id": "vader",
+        "query": "In a well-shuffled standard deck of 52 playing cards, if you draw two cards consecutively without replacement, what is the exact probability that both cards are Aces? State your answer as a simplified fraction.",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 156.14,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "MR-005",
+        "system_id": "baseline",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "MR-005",
+        "system_id": "vader",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "MR-006",
+      "category": "multi_step_reasoning",
+      "question": "Gear A has 20 teeth and is directly meshed with Gear B, which has 40 teeth. Gear B is in turn directly meshed with Gear C, which has 10 teeth. If Gear A makes 10 complete clockwise rotations, how many complete rotations will Gear C make, and in what direction?",
+      "baseline_result": {
+        "case_id": "MR-006",
+        "system_id": "baseline",
+        "query": "Gear A has 20 teeth and is directly meshed with Gear B, which has 40 teeth. Gear B is in turn directly meshed with Gear C, which has 10 teeth. If Gear A makes 10 complete clockwise rotations, how many complete rotations will Gear C make, and in what direction?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 10.68,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "MR-006",
+        "system_id": "vader",
+        "query": "Gear A has 20 teeth and is directly meshed with Gear B, which has 40 teeth. Gear B is in turn directly meshed with Gear C, which has 10 teeth. If Gear A makes 10 complete clockwise rotations, how many complete rotations will Gear C make, and in what direction?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 170.64,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "MR-006",
+        "system_id": "baseline",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "MR-006",
+        "system_id": "vader",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "MR-007",
+      "category": "multi_step_reasoning",
+      "question": "A mother is currently four times as old as her son. In 20 years, she will be twice as old as her son. How old are the mother and son today?",
+      "baseline_result": {
+        "case_id": "MR-007",
+        "system_id": "baseline",
+        "query": "A mother is currently four times as old as her son. In 20 years, she will be twice as old as her son. How old are the mother and son today?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 20.8,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "MR-007",
+        "system_id": "vader",
+        "query": "A mother is currently four times as old as her son. In 20 years, she will be twice as old as her son. How old are the mother and son today?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 182.12,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "MR-007",
+        "system_id": "baseline",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "MR-007",
+        "system_id": "vader",
+        "category": "multi_step_reasoning",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "ED-001",
+      "category": "evidence_dependent",
+      "question": "Who were awarded the 2024 Nobel Prize in Physics, and for what specific scientific contribution?",
+      "baseline_result": {
+        "case_id": "ED-001",
+        "system_id": "baseline",
+        "query": "Who were awarded the 2024 Nobel Prize in Physics, and for what specific scientific contribution?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 16.2,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "ED-001",
+        "system_id": "vader",
+        "query": "Who were awarded the 2024 Nobel Prize in Physics, and for what specific scientific contribution?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 170.17,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "ED-001",
+        "system_id": "baseline",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/4 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "ED-001",
+        "system_id": "vader",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/4 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "ED-002",
+      "category": "evidence_dependent",
+      "question": "What is the diameter of the James Webb Space Telescope's (JWST) primary mirror, and what date was it launched into space?",
+      "baseline_result": {
+        "case_id": "ED-002",
+        "system_id": "baseline",
+        "query": "What is the diameter of the James Webb Space Telescope's (JWST) primary mirror, and what date was it launched into space?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 21.46,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "ED-002",
+        "system_id": "vader",
+        "query": "What is the diameter of the James Webb Space Telescope's (JWST) primary mirror, and what date was it launched into space?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 164.26,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "ED-002",
+        "system_id": "baseline",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "ED-002",
+        "system_id": "vader",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "ED-003",
+      "category": "evidence_dependent",
+      "question": "In what city and country was the fifth session of the Intergovernmental Negotiating Committee (INC-5) to develop a global plastics treaty scheduled in late 2024?",
+      "baseline_result": {
+        "case_id": "ED-003",
+        "system_id": "baseline",
+        "query": "In what city and country was the fifth session of the Intergovernmental Negotiating Committee (INC-5) to develop a global plastics treaty scheduled in late 2024?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 13.98,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "ED-003",
+        "system_id": "vader",
+        "query": "In what city and country was the fifth session of the Intergovernmental Negotiating Committee (INC-5) to develop a global plastics treaty scheduled in late 2024?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 160.03,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "ED-003",
+        "system_id": "baseline",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "ED-003",
+        "system_id": "vader",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "ED-004",
+      "category": "evidence_dependent",
+      "question": "Under the European Union Artificial Intelligence Act (Regulation 2024/1689), name at least three AI practices that are explicitly categorized under 'Unacceptable Risk' and prohibited.",
+      "baseline_result": {
+        "case_id": "ED-004",
+        "system_id": "baseline",
+        "query": "Under the European Union Artificial Intelligence Act (Regulation 2024/1689), name at least three AI practices that are explicitly categorized under 'Unacceptable Risk' and prohibited.",
+        "answer": "Mock LLM response.",
+        "latency_ms": 11.72,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "ED-004",
+        "system_id": "vader",
+        "query": "Under the European Union Artificial Intelligence Act (Regulation 2024/1689), name at least three AI practices that are explicitly categorized under 'Unacceptable Risk' and prohibited.",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 174.59,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "ED-004",
+        "system_id": "baseline",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "ED-004",
+        "system_id": "vader",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "ED-005",
+      "category": "evidence_dependent",
+      "question": "Who is the female astronaut assigned to NASA's Artemis II crewed lunar flyby mission?",
+      "baseline_result": {
+        "case_id": "ED-005",
+        "system_id": "baseline",
+        "query": "Who is the female astronaut assigned to NASA's Artemis II crewed lunar flyby mission?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 11.9,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "ED-005",
+        "system_id": "vader",
+        "query": "Who is the female astronaut assigned to NASA's Artemis II crewed lunar flyby mission?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 172.46,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "ED-005",
+        "system_id": "baseline",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "ED-005",
+        "system_id": "vader",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/1 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "ED-006",
+      "category": "evidence_dependent",
+      "question": "What is the approximate distance of the Voyager 1 spacecraft from Earth as of 2024, and what region of space is it traveling through?",
+      "baseline_result": {
+        "case_id": "ED-006",
+        "system_id": "baseline",
+        "query": "What is the approximate distance of the Voyager 1 spacecraft from Earth as of 2024, and what region of space is it traveling through?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 15.16,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "ED-006",
+        "system_id": "vader",
+        "query": "What is the approximate distance of the Voyager 1 spacecraft from Earth as of 2024, and what region of space is it traveling through?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 167.84,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "ED-006",
+        "system_id": "baseline",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "ED-006",
+        "system_id": "vader",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "ED-007",
+      "category": "evidence_dependent",
+      "question": "What was the brand name and targeted genetic blood disorder of the first CRISPR-Cas9 based gene-editing therapy approved by the US FDA in December 2023?",
+      "baseline_result": {
+        "case_id": "ED-007",
+        "system_id": "baseline",
+        "query": "What was the brand name and targeted genetic blood disorder of the first CRISPR-Cas9 based gene-editing therapy approved by the US FDA in December 2023?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 16.86,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "ED-007",
+        "system_id": "vader",
+        "query": "What was the brand name and targeted genetic blood disorder of the first CRISPR-Cas9 based gene-editing therapy approved by the US FDA in December 2023?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 156.49,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "ED-007",
+        "system_id": "baseline",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      },
+      "vader_score": {
+        "case_id": "ED-007",
+        "system_id": "vader",
+        "category": "evidence_dependent",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 1.0,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.35,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/2 (0.00)"
+        ]
+      }
+    },
+    {
+      "case_id": "CI-001",
+      "category": "conflicting_or_insufficient",
+      "question": "What was the single primary intended purpose of the prehistoric monument Stonehenge when it was first built?",
+      "baseline_result": {
+        "case_id": "CI-001",
+        "system_id": "baseline",
+        "query": "What was the single primary intended purpose of the prehistoric monument Stonehenge when it was first built?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 12.5,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "CI-001",
+        "system_id": "vader",
+        "query": "What was the single primary intended purpose of the prehistoric monument Stonehenge when it was first built?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 158.77,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "CI-001",
+        "system_id": "baseline",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/6 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "CI-001",
+        "system_id": "vader",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/6 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "CI-002",
+      "category": "conflicting_or_insufficient",
+      "question": "Who was the historical prisoner known as the 'Man in the Iron Mask' held during the reign of King Louis XIV?",
+      "baseline_result": {
+        "case_id": "CI-002",
+        "system_id": "baseline",
+        "query": "Who was the historical prisoner known as the 'Man in the Iron Mask' held during the reign of King Louis XIV?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 13.96,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "CI-002",
+        "system_id": "vader",
+        "query": "Who was the historical prisoner known as the 'Man in the Iron Mask' held during the reign of King Louis XIV?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 172.38,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "CI-002",
+        "system_id": "baseline",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "CI-002",
+        "system_id": "vader",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "CI-003",
+      "category": "conflicting_or_insufficient",
+      "question": "Did Alexander Graham Bell or Elisha Gray legitimately invent the telephone first on February 14, 1876?",
+      "baseline_result": {
+        "case_id": "CI-003",
+        "system_id": "baseline",
+        "query": "Did Alexander Graham Bell or Elisha Gray legitimately invent the telephone first on February 14, 1876?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 14.39,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "CI-003",
+        "system_id": "vader",
+        "query": "Did Alexander Graham Bell or Elisha Gray legitimately invent the telephone first on February 14, 1876?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 159.18,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "CI-003",
+        "system_id": "baseline",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "CI-003",
+        "system_id": "vader",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "CI-004",
+      "category": "conflicting_or_insufficient",
+      "question": "What is the single proven optimal dietary macronutrient ratio (carbohydrates, fats, proteins) for maximizing human longevity?",
+      "baseline_result": {
+        "case_id": "CI-004",
+        "system_id": "baseline",
+        "query": "What is the single proven optimal dietary macronutrient ratio (carbohydrates, fats, proteins) for maximizing human longevity?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 22.25,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "CI-004",
+        "system_id": "vader",
+        "query": "What is the single proven optimal dietary macronutrient ratio (carbohydrates, fats, proteins) for maximizing human longevity?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 157.46,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "CI-004",
+        "system_id": "baseline",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "CI-004",
+        "system_id": "vader",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "CI-005",
+      "category": "conflicting_or_insufficient",
+      "question": "What definitively happened to aviator Amelia Earhart and navigator Fred Noonan after their last radio transmission in July 1937?",
+      "baseline_result": {
+        "case_id": "CI-005",
+        "system_id": "baseline",
+        "query": "What definitively happened to aviator Amelia Earhart and navigator Fred Noonan after their last radio transmission in July 1937?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 15.25,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "CI-005",
+        "system_id": "vader",
+        "query": "What definitively happened to aviator Amelia Earhart and navigator Fred Noonan after their last radio transmission in July 1937?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 153.24,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "CI-005",
+        "system_id": "baseline",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "CI-005",
+        "system_id": "vader",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "CI-006",
+      "category": "conflicting_or_insufficient",
+      "question": "What is the deciphered translation and language of origin of the medieval Voynich Manuscript?",
+      "baseline_result": {
+        "case_id": "CI-006",
+        "system_id": "baseline",
+        "query": "What is the deciphered translation and language of origin of the medieval Voynich Manuscript?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 14.54,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "CI-006",
+        "system_id": "vader",
+        "query": "What is the deciphered translation and language of origin of the medieval Voynich Manuscript?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 157.95,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "CI-006",
+        "system_id": "baseline",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "CI-006",
+        "system_id": "vader",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "CI-007",
+      "category": "conflicting_or_insufficient",
+      "question": "What was the single definitive trigger that caused the collapse of Mediterranean civilizations during the Late Bronze Age around 1200 BCE?",
+      "baseline_result": {
+        "case_id": "CI-007",
+        "system_id": "baseline",
+        "query": "What was the single definitive trigger that caused the collapse of Mediterranean civilizations during the Late Bronze Age around 1200 BCE?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 11.73,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "CI-007",
+        "system_id": "vader",
+        "query": "What was the single definitive trigger that caused the collapse of Mediterranean civilizations during the Late Bronze Age around 1200 BCE?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 172.73,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "CI-007",
+        "system_id": "baseline",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "CI-007",
+        "system_id": "vader",
+        "category": "conflicting_or_insufficient",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/5 (0.00)",
+          "Required elements coverage: 0/2 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "EU-001",
+      "category": "explicit_uncertainty",
+      "question": "In what exact calendar year will Artificial General Intelligence (AGI) first reach or surpass human cognitive abilities across all domains?",
+      "baseline_result": {
+        "case_id": "EU-001",
+        "system_id": "baseline",
+        "query": "In what exact calendar year will Artificial General Intelligence (AGI) first reach or surpass human cognitive abilities across all domains?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 19.26,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "EU-001",
+        "system_id": "vader",
+        "query": "In what exact calendar year will Artificial General Intelligence (AGI) first reach or surpass human cognitive abilities across all domains?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 183.33,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "EU-001",
+        "system_id": "baseline",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "EU-001",
+        "system_id": "vader",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "EU-002",
+      "category": "explicit_uncertainty",
+      "question": "Does intelligent extraterrestrial life currently exist elsewhere within our Milky Way galaxy?",
+      "baseline_result": {
+        "case_id": "EU-002",
+        "system_id": "baseline",
+        "query": "Does intelligent extraterrestrial life currently exist elsewhere within our Milky Way galaxy?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 17.51,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "EU-002",
+        "system_id": "vader",
+        "query": "Does intelligent extraterrestrial life currently exist elsewhere within our Milky Way galaxy?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 188.63,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "EU-002",
+        "system_id": "baseline",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "EU-002",
+        "system_id": "vader",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "EU-003",
+      "category": "explicit_uncertainty",
+      "question": "What will be the exact increase in global average surface temperature in degrees Celsius above pre-industrial levels in the year 2100?",
+      "baseline_result": {
+        "case_id": "EU-003",
+        "system_id": "baseline",
+        "query": "What will be the exact increase in global average surface temperature in degrees Celsius above pre-industrial levels in the year 2100?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 24.1,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "EU-003",
+        "system_id": "vader",
+        "query": "What will be the exact increase in global average surface temperature in degrees Celsius above pre-industrial levels in the year 2100?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 140.85,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "EU-003",
+        "system_id": "baseline",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "EU-003",
+        "system_id": "vader",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "EU-004",
+      "category": "explicit_uncertainty",
+      "question": "What is the verified true real-world legal identity of Bitcoin creator Satoshi Nakamoto?",
+      "baseline_result": {
+        "case_id": "EU-004",
+        "system_id": "baseline",
+        "query": "What is the verified true real-world legal identity of Bitcoin creator Satoshi Nakamoto?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 14.83,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "EU-004",
+        "system_id": "vader",
+        "query": "What is the verified true real-world legal identity of Bitcoin creator Satoshi Nakamoto?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 141.31,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "EU-004",
+        "system_id": "baseline",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "EU-004",
+        "system_id": "vader",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "EU-005",
+      "category": "explicit_uncertainty",
+      "question": "What is the exact physical state of matter and spacetime at the central gravitational singularity of a black hole?",
+      "baseline_result": {
+        "case_id": "EU-005",
+        "system_id": "baseline",
+        "query": "What is the exact physical state of matter and spacetime at the central gravitational singularity of a black hole?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 14.83,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "EU-005",
+        "system_id": "vader",
+        "query": "What is the exact physical state of matter and spacetime at the central gravitational singularity of a black hole?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 153.97,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "EU-005",
+        "system_id": "baseline",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "EU-005",
+        "system_id": "vader",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "EU-006",
+      "category": "explicit_uncertainty",
+      "question": "Who will win the United States Presidential Election in November 2028?",
+      "baseline_result": {
+        "case_id": "EU-006",
+        "system_id": "baseline",
+        "query": "Who will win the United States Presidential Election in November 2028?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 15.09,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "EU-006",
+        "system_id": "vader",
+        "query": "Who will win the United States Presidential Election in November 2028?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 170.9,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "EU-006",
+        "system_id": "baseline",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "EU-006",
+        "system_id": "vader",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/3 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    },
+    {
+      "case_id": "EU-007",
+      "category": "explicit_uncertainty",
+      "question": "In computational complexity theory, has it been proven whether the complexity class P is equal to NP?",
+      "baseline_result": {
+        "case_id": "EU-007",
+        "system_id": "baseline",
+        "query": "In computational complexity theory, has it been proven whether the complexity class P is equal to NP?",
+        "answer": "Mock LLM response.",
+        "latency_ms": 13.43,
+        "llm_call_count": 1,
+        "prompt_tokens": 50,
+        "completion_tokens": 50,
+        "total_tokens": 100,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [],
+        "rounds_completed": 0,
+        "error": null
+      },
+      "vader_result": {
+        "case_id": "EU-007",
+        "system_id": "vader",
+        "query": "In computational complexity theory, has it been proven whether the complexity class P is equal to NP?",
+        "answer": "Judge authoritative synthesis and final response for: Test Query.",
+        "latency_ms": 158.24,
+        "llm_call_count": 9,
+        "prompt_tokens": null,
+        "completion_tokens": null,
+        "total_tokens": null,
+        "cost_usd": null,
+        "retrieval_failure_count": 0,
+        "model_id": "mock-model-v1",
+        "provider": "mock",
+        "citations": [
+          "https://example.org/docs/evidence-1",
+          "https://example.org/docs/evidence-2",
+          "https://example.org/docs/evidence-3",
+          "https://example.org/docs/evidence-4",
+          "https://example.org/docs/evidence-5"
+        ],
+        "rounds_completed": 2,
+        "error": null
+      },
+      "baseline_score": {
+        "case_id": "EU-007",
+        "system_id": "baseline",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      },
+      "vader_score": {
+        "case_id": "EU-007",
+        "system_id": "vader",
+        "category": "explicit_uncertainty",
+        "correctness": 0.0,
+        "completeness": 0.0,
+        "uncertainty_calibration": 0.15,
+        "unsupported_claim_rate": 0.0,
+        "citation_validity": 1.0,
+        "overall_score": 0.1375,
+        "scoring_notes": [
+          "Factual reference matches: 0/4 (0.00)",
+          "Required elements coverage: 0/3 (0.00)",
+          "Overconfident response: failed to express required uncertainty or contested evidence."
+        ]
+      }
+    }
+  ]
+}
