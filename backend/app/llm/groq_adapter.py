@@ -27,7 +27,6 @@ import time
 from tenacity import (
     RetryError,
     retry,
-    retry_if_exception_type,
     stop_after_attempt,
     wait_exponential,
 )
@@ -65,6 +64,71 @@ _KNOWN_GROQ_MODELS: set[str] = {
 }
 
 
+def _parse_groq_rate_limit(exc: Exception) -> LLMRateLimitError:
+    """Extract retry_after, token limits, and diagnostic details from a Groq 429 error."""
+    import re
+    msg = sanitize_error_message(str(exc))
+    retry_after: float | None = None
+    limit_tokens: int | None = None
+    used_tokens: int | None = None
+    requested_tokens: int | None = None
+    limit_type: str | None = None
+
+    headers = getattr(getattr(exc, "response", None), "headers", None)
+    if headers:
+        raw_retry = headers.get("retry-after")
+        if raw_retry:
+            try:
+                retry_after = float(raw_retry)
+            except (ValueError, TypeError):
+                pass
+        if retry_after is None:
+            raw_reset_tokens = headers.get("x-ratelimit-reset-tokens")
+            if raw_reset_tokens:
+                m_reset = re.search(r"([0-9]+(?:\.[0-9]+)?)", raw_reset_tokens)
+                if m_reset:
+                    try:
+                        retry_after = float(m_reset.group(1))
+                    except (ValueError, TypeError):
+                        pass
+
+        raw_limit = headers.get("x-ratelimit-limit-tokens")
+        if raw_limit and raw_limit.isdigit():
+            limit_tokens = int(raw_limit)
+
+    if retry_after is None:
+        m_msg = re.search(r"try again in\s+([0-9]+(?:\.[0-9]+)?)\s*s?", msg, re.IGNORECASE)
+        if m_msg:
+            try:
+                retry_after = float(m_msg.group(1))
+            except (ValueError, TypeError):
+                pass
+
+    m_stats = re.search(
+        r"Limit\s+(\d+),\s*Used\s+(\d+),\s*Requested\s+(\d+)",
+        msg,
+        re.IGNORECASE,
+    )
+    if m_stats:
+        limit_tokens = int(m_stats.group(1))
+        used_tokens = int(m_stats.group(2))
+        requested_tokens = int(m_stats.group(3))
+
+    if "tokens per minute" in msg.lower() or "(tpm)" in msg.lower() or "tokens" in msg.lower():
+        limit_type = "tokens"
+    elif "requests per minute" in msg.lower() or "(rpm)" in msg.lower() or "requests" in msg.lower():
+        limit_type = "requests"
+
+    return LLMRateLimitError(
+        f"Groq rate limit: {msg}",
+        retry_after=retry_after,
+        limit_tokens=limit_tokens,
+        used_tokens=used_tokens,
+        requested_tokens=requested_tokens,
+        limit_type=limit_type,
+    )
+
+
 class GroqLLMClient(BaseLLMClient):
     """
     Async Groq LLM adapter.
@@ -80,7 +144,13 @@ class GroqLLMClient(BaseLLMClient):
     def default_model_id(self) -> str:
         return _GROQ_DEFAULT_MODEL
 
-    async def complete(self, messages: list[LLMMessage]) -> LLMResponse:
+    async def complete(
+        self,
+        messages: list[LLMMessage],
+        max_tokens: int | None = None,
+        temperature: float | None = None,
+        json_mode: bool | None = None,
+    ) -> LLMResponse:
         self._validate_messages(messages)
 
         model_id = self.effective_model_id
@@ -94,7 +164,13 @@ class GroqLLMClient(BaseLLMClient):
         self._log_call(messages)
 
         try:
-            return await self._call_with_retry(messages, model_id)
+            return await self._call_with_retry(
+                messages,
+                model_id,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                json_mode=json_mode,
+            )
         except RetryError as exc:
             if exc.last_attempt and exc.last_attempt.exception():
                 raise exc.last_attempt.exception() from exc
@@ -103,26 +179,86 @@ class GroqLLMClient(BaseLLMClient):
             ) from exc
 
     async def _call_with_retry(
-        self, messages: list[LLMMessage], model_id: str
+        self,
+        messages: list[LLMMessage],
+        model_id: str,
+        max_tokens: int | None = None,
+        temperature: float | None = None,
+        json_mode: bool | None = None,
     ) -> LLMResponse:
-        """Perform the API call with tenacity retry for transient errors."""
-        retry_wait = self._config.extra.get("retry_wait")
-        if retry_wait is None:
-            retry_wait = wait_exponential(multiplier=1, min=2, max=30)
+        """Perform the API call with tenacity retry for transient errors and adaptive rate-limit backoff."""
+        override_retry_wait = self._config.extra.get("retry_wait")
+
+        def _compute_wait(retry_state) -> float:
+            if override_retry_wait is not None:
+                return override_retry_wait(retry_state) if callable(override_retry_wait) else override_retry_wait
+            if retry_state.outcome and retry_state.outcome.failed:
+                exc = retry_state.outcome.exception()
+                if isinstance(exc, LLMRateLimitError) and exc.retry_after is not None:
+                    # Respect provider reset time with a 0.5s safety buffer, capped at 45s
+                    return min(max(exc.retry_after + 0.5, 1.0), 45.0)
+            return wait_exponential(multiplier=1, min=2, max=30)(retry_state)
+
+        def _should_retry(retry_state) -> bool:
+            if not (retry_state.outcome and retry_state.outcome.failed):
+                return False
+            exc = retry_state.outcome.exception()
+            if isinstance(exc, LLMTimeoutError):
+                return True
+            if isinstance(exc, LLMRateLimitError):
+                # Abort futile retries if single request tokens alone exceed total limit
+                if (
+                    exc.requested_tokens is not None
+                    and exc.limit_tokens is not None
+                    and exc.requested_tokens > exc.limit_tokens
+                ):
+                    logger.warning(
+                        "Groq rate limit: requested tokens (%d) exceed limit (%d); aborting futile retries.",
+                        exc.requested_tokens,
+                        exc.limit_tokens,
+                    )
+                    return False
+                # Abort futile retries if retry_after exceeds maximum wait budget (45s)
+                if exc.retry_after is not None and exc.retry_after > 45.0:
+                    logger.warning(
+                        "Groq rate limit: retry_after (%.1fs) exceeds maximum wait budget (45s); aborting retries.",
+                        exc.retry_after,
+                    )
+                    return False
+                return True
+            return False
 
         @retry(
-            retry=retry_if_exception_type((LLMRateLimitError, LLMTimeoutError)),
+            retry=_should_retry,
             stop=stop_after_attempt(self._config.max_retries + 1),
-            wait=retry_wait,
+            wait=_compute_wait,
             reraise=True,
         )
         async def _attempt() -> LLMResponse:
-            return await self._single_call(messages, model_id)
+            if json_mode is not None:
+                return await self._single_call(
+                    messages,
+                    model_id,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    json_mode=json_mode,
+                )
+            return await self._single_call(
+                messages,
+                model_id,
+                max_tokens=max_tokens,
+                temperature=temperature,
+            )
 
         return await _attempt()
 
     async def _single_call(
-        self, messages: list[LLMMessage], model_id: str
+        self,
+        messages: list[LLMMessage],
+        model_id: str,
+        max_tokens: int | None = None,
+        temperature: float | None = None,
+        json_mode: bool | None = None,
     ) -> LLMResponse:
         """Make one API call to Groq."""
         try:
@@ -156,6 +292,17 @@ class GroqLLMClient(BaseLLMClient):
                 0, {"role": "system", "content": self._config.system_prompt}
             )
 
+        eff_max_tokens = max_tokens if max_tokens is not None else self._config.max_tokens
+        eff_temperature = temperature if temperature is not None else self._config.temperature
+        eff_json_mode = (
+            json_mode
+            if json_mode is not None
+            else (
+                getattr(self._config, "json_mode", False)
+                or self._config.extra.get("json_mode")
+            )
+        )
+
         t_start = time.monotonic()
         try:
             client = AsyncGroq(
@@ -163,12 +310,16 @@ class GroqLLMClient(BaseLLMClient):
                 timeout=float(self._config.timeout_seconds),
                 max_retries=0,  # we handle retries via tenacity
             )
-            completion = await client.chat.completions.create(
-                model=model_id,
-                messages=groq_messages,
-                temperature=self._config.temperature,
-                max_tokens=self._config.max_tokens,
-            )
+            create_kwargs: dict = {
+                "model": model_id,
+                "messages": groq_messages,
+                "temperature": eff_temperature,
+                "max_tokens": eff_max_tokens,
+            }
+            if eff_json_mode:
+                create_kwargs["response_format"] = {"type": "json_object"}
+
+            completion = await client.chat.completions.create(**create_kwargs)
         except APITimeoutError as exc:
             raise LLMTimeoutError(
                 f"Groq request timed out: {sanitize_error_message(str(exc))}"
@@ -178,9 +329,7 @@ class GroqLLMClient(BaseLLMClient):
                 f"Groq authentication failed: {sanitize_error_message(str(exc))}"
             ) from exc
         except RateLimitError as exc:
-            raise LLMRateLimitError(
-                f"Groq rate limit: {sanitize_error_message(str(exc))}"
-            ) from exc
+            raise _parse_groq_rate_limit(exc) from exc
         except APIStatusError as exc:
             sanitized = sanitize_error_message(str(exc))
             if exc.status_code in (401, 403):
@@ -188,9 +337,7 @@ class GroqLLMClient(BaseLLMClient):
                     f"Groq authentication failed: {sanitized}"
                 ) from exc
             if exc.status_code == 429:
-                raise LLMRateLimitError(
-                    f"Groq rate limit: {sanitized}"
-                ) from exc
+                raise _parse_groq_rate_limit(exc) from exc
             raise LLMError(f"Groq API error {exc.status_code}: {sanitized}") from exc
         except APIConnectionError as exc:
             raise LLMError(
@@ -199,6 +346,8 @@ class GroqLLMClient(BaseLLMClient):
         except TimeoutError as exc:
             raise LLMTimeoutError("Groq request timed out.") from exc
         except Exception as exc:
+            if isinstance(exc, LLMError):
+                raise
             raise LLMError(
                 f"Groq unexpected error: {sanitize_error_message(str(exc))}"
             ) from exc
@@ -220,5 +369,4 @@ class GroqLLMClient(BaseLLMClient):
             latency_ms=latency_ms,
             finish_reason=choice.finish_reason or "stop",
         )
-        self._log_response(response)
         return response

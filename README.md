@@ -55,19 +55,59 @@ The API will be available at:
 
 ### Running Tests (no API keys required)
 
-```bash
+**Backend Tests:**
+```powershell
 cd backend
 .\venv\Scripts\activate
-pytest
+pytest -v
 ```
 
-### Frontend
+**Run Priority 1 Claim Verification Tests specifically:**
+```powershell
+pytest tests/test_verification_report.py -v
+```
+
+**Frontend Tests & Typecheck:**
+```bash
+cd frontend
+npm run test    # runs vitest (50/50 tests)
+npm run lint    # runs oxlint (0 errors)
+npm run build   # typecheck with tsc + vite build
+```
+
+### Frontend Development Server
 
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+
+## Transparent Claim Verification (Priority 1)
+
+VADER features a structured, auditable Claim Verification system that inspects empirical assertions generated across debate rounds:
+
+- **Report Statuses (`report_status`)**:
+  - `completed`: All submitted claims were evaluated against external evidence.
+  - `partial`: Some claims evaluated, others skipped or unverified.
+  - `unavailable`: Search provider timed out, rate-limited, or failed.
+  - `failed`: Claim verification service encountered an internal exception.
+  - `no_claims`: Query produced no factual claims requiring verification (e.g., conceptual or abstract queries).
+
+- **Claim Statuses (`status`)**:
+  - `supported`: Direct or corroborating external evidence was retrieved.
+  - `contradicted`: Retrieved sources contradict the asserted statement.
+  - `insufficient_evidence`: Search completed, but sources were conflicting, incomplete, or inconclusive.
+  - `not_checked`: Search provider failed or was unavailable; the claim could not be tested.
+
+- **Epistemic Safeguards**:
+  - `supported ≠ truth`: Indicates external corroborating sources were found; does not guarantee absolute ground truth or eliminate LLM hallucinations.
+  - `insufficient_evidence / not_checked ≠ false`: Lack of evidence or search timeouts are explicitly preserved as inconclusive and never conflated with disproof.
+
+- **Security & Source Integrity**:
+  - Evidence links are rendered with `target="_blank"` and `rel="noopener noreferrer"`.
+  - Hallucinated URLs are stripped; only URLs returned by the retrieval provider are cited.
+  - Potential prompt injection in external snippets is isolated inside sanitized XML blocks.
 
 ## Environment Variables
 

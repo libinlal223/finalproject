@@ -97,6 +97,12 @@ export const DebateRoundsViewer: React.FC<DebateRoundsViewerProps> = ({ rounds }
               <div className="answer-prose">
                 {currentRound.executor_a_answer}
               </div>
+              {currentRound.executor_a_notes && (
+                <div className="executor-revision-notes" data-testid="executor-a-notes">
+                  <span className="revision-notes-label">Revision Strategy:</span>{' '}
+                  <span className="revision-notes-text">{currentRound.executor_a_notes}</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -113,6 +119,12 @@ export const DebateRoundsViewer: React.FC<DebateRoundsViewerProps> = ({ rounds }
               <div className="answer-prose">
                 {currentRound.executor_b_answer}
               </div>
+              {currentRound.executor_b_notes && (
+                <div className="executor-revision-notes" data-testid="executor-b-notes">
+                  <span className="revision-notes-label">Revision Strategy:</span>{' '}
+                  <span className="revision-notes-text">{currentRound.executor_b_notes}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -124,9 +136,61 @@ export const DebateRoundsViewer: React.FC<DebateRoundsViewerProps> = ({ rounds }
               <span className="executor-role-badge badge-role-critic">Critic Agent Audit</span>
               <span className="critic-subtitle">Adversarial evaluation & contradiction detection</span>
             </div>
+            {currentRound.addressed_issues && currentRound.addressed_issues.length > 0 && (
+              <div className="addressed-issues-container" data-testid="addressed-issues-list">
+                <span className="addressed-issues-label">Addressed in Revisions:</span>
+                <div className="addressed-pills">
+                  {currentRound.addressed_issues.map((issId) => (
+                    <span key={issId} className="addressed-pill">
+                      ✓ {issId}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           <div className="critic-card-body">
             <p className="critic-text">{currentRound.critique}</p>
+
+            {/* Structured findings if present */}
+            {currentRound.issues && currentRound.issues.length > 0 && (
+              <div className="critic-issues-list" data-testid="critic-issues-list">
+                <h5 className="issues-list-heading">Specific Actionable Findings:</h5>
+                <div className="issues-grid">
+                  {currentRound.issues.map((issue) => (
+                    <div
+                      key={issue.issue_id}
+                      className={`issue-item-card severity-${issue.severity}`}
+                      data-testid={`critic-issue-${issue.issue_id}`}
+                    >
+                      <div className="issue-item-header">
+                        <div className="issue-tags">
+                          <span className={`issue-severity-badge badge-${issue.severity}`}>
+                            {issue.severity.toUpperCase()}
+                          </span>
+                          <span className="issue-id-tag">{issue.issue_id}</span>
+                          {issue.claim_id && (
+                            <span className="issue-claim-link" title="Linked to Verified Claim">
+                              🔗 {issue.claim_id}
+                            </span>
+                          )}
+                          <span className="issue-target-tag">Target: {issue.target}</span>
+                        </div>
+                      </div>
+                      <div className="issue-claim-name">
+                        <strong>Affected:</strong> {issue.affected_claim}
+                      </div>
+                      <div className="issue-explanation">{issue.explanation}</div>
+                      {issue.recommended_correction && (
+                        <div className="issue-recommendation">
+                          <strong>Correction:</strong> {issue.recommended_correction}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

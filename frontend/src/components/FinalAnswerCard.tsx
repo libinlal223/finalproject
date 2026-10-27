@@ -6,6 +6,8 @@ interface FinalAnswerCardProps {
   status: DebateStatus;
   roundsCompleted: number;
   subtasks: string[];
+  verdictSummary?: string | null;
+  unresolvedUncertainties?: string[];
   onReset: () => void;
 }
 
@@ -14,6 +16,8 @@ export const FinalAnswerCard: React.FC<FinalAnswerCardProps> = ({
   status,
   roundsCompleted,
   subtasks,
+  verdictSummary,
+  unresolvedUncertainties,
   onReset,
 }) => {
   const [copied, setCopied] = useState(false);
@@ -58,7 +62,9 @@ export const FinalAnswerCard: React.FC<FinalAnswerCardProps> = ({
             </svg>
           </div>
           <div>
-            <h2 className="card-main-title">Final Synthesis & Adjudication</h2>
+            <h2 className="card-main-title">
+              {status === 'error' ? 'Candidate Output (Unadjudicated Fallback)' : 'Final Synthesis & Adjudication'}
+            </h2>
             <div className="badge-row">
               {getStatusBadge(status)}
               <span className="round-badge">
@@ -111,6 +117,25 @@ export const FinalAnswerCard: React.FC<FinalAnswerCardProps> = ({
       <div className="final-answer-body">
         {finalAnswer ? (
           <div className="answer-text-content">
+            {finalAnswer.startsWith('[UNADJUDICATED FALLBACK CANDIDATE') && (
+              <div
+                className="unadjudicated-fallback-warning"
+                data-testid="unadjudicated-warning"
+                style={{
+                  padding: '12px 16px',
+                  marginBottom: '16px',
+                  borderRadius: '8px',
+                  background: 'rgba(239, 68, 68, 0.12)',
+                  border: '1px solid rgba(239, 68, 68, 0.35)',
+                  color: '#FCA5A5',
+                  fontSize: '0.875rem',
+                  lineHeight: '1.4',
+                }}
+              >
+                <strong>Unadjudicated Fallback Notice:</strong> Debate stopped before adjudication.
+                The following candidate output has NOT been evaluated, verified, or synthesized by the Judge.
+              </div>
+            )}
             {finalAnswer.split('\n\n').map((paragraph, idx) => (
               <p key={idx} className="answer-paragraph">
                 {paragraph}
@@ -123,6 +148,33 @@ export const FinalAnswerCard: React.FC<FinalAnswerCardProps> = ({
           </div>
         )}
       </div>
+
+      {verdictSummary && (
+        <div className="verdict-summary-callout" data-testid="verdict-summary">
+          <div className="verdict-summary-header">
+            <span className="verdict-summary-label">
+              {status === 'completed' || status === 'converged'
+                ? 'Judge Adjudication Rationale'
+                : 'Adjudication Fallback & Status Rationale'}
+            </span>
+          </div>
+          <p className="verdict-summary-text">{verdictSummary}</p>
+        </div>
+      )}
+
+      {unresolvedUncertainties && unresolvedUncertainties.length > 0 && (
+        <div className="unresolved-uncertainties-section" data-testid="unresolved-uncertainties">
+          <h4 className="uncertainties-title">Epistemic Uncertainty & Unresolved Boundaries</h4>
+          <ul className="uncertainties-list">
+            {unresolvedUncertainties.map((item, idx) => (
+              <li key={idx} className="uncertainty-item">
+                <span className="uncertainty-bullet" />
+                <span className="uncertainty-text">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {subtasks && subtasks.length > 0 && (
         <div className="subtasks-section">

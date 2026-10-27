@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import logging
 import re
+from typing import Any
 
 from app.evaluation.models import (
     AggregateMetrics,
@@ -399,3 +400,71 @@ class MetricsCalculator:
         )
 
         return category_summaries, aggregate
+
+    @classmethod
+    def evaluate_revision_improvement(
+        cls,
+        pre_answer: str,
+        post_answer: str,
+        reference_facts: list[str],
+        contradicted_claims: list[str] | None = None,
+        supported_claims: list[str] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Evaluate whether a debate revision cycle improved answer factual correctness.
+
+        Measures:
+        1. Reference fact coverage before and after revision.
+        2. Retraction of contradicted/unverified claims.
+        3. Preservation of previously supported claims (retention safeguard).
+        4. Detects degradation cases where revision reduced correctness.
+        """
+        pre_lower = pre_answer.lower()
+        post_lower = post_answer.lower()
+
+        # 1. Reference fact match rate
+        total_facts = len(reference_facts)
+        if total_facts == 0:
+            pre_corr = 1.0
+            post_corr = 1.0
+        else:
+            pre_matches = sum(1 for f in reference_facts if f.lower() in pre_lower)
+            post_matches = sum(1 for f in reference_facts if f.lower() in post_lower)
+            pre_corr = round(pre_matches / total_facts, 4)
+            post_corr = round(post_matches / total_facts, 4)
+
+        corr_delta = round(post_corr - pre_corr, 4)
+
+        # 2. Contradiction retraction
+        contradictions = contradicted_claims or []
+        pre_contra_count = sum(1 for c in contradictions if c.lower() in pre_lower)
+        post_contra_count = sum(1 for c in contradictions if c.lower() in post_lower)
+        retracted_count = max(0, pre_contra_count - post_contra_count)
+
+        # 3. Supported claim retention
+        supported = supported_claims or []
+        retained_count = sum(1 for s in supported if s.lower() in post_lower)
+        dropped_count = sum(1 for s in supported if s.lower() in pre_lower and s.lower() not in post_lower)
+
+        # 4. Net improvement determination
+        # Improved if correctness rose or contradictions dropped, AND no supported claims were dropped
+        is_improved = (corr_delta > 0 or retracted_count > 0) and dropped_count == 0
+        is_degraded = corr_delta < 0 or dropped_count > 0 or post_contra_count > pre_contra_count
+
+        return {
+            "pre_correctness": pre_corr,
+            "post_correctness": post_corr,
+            "correctness_delta": corr_delta,
+            "contradictions_retracted": retracted_count,
+            "contradictions_remaining": post_contra_count,
+            "supported_claims_retained": retained_count,
+            "supported_claims_dropped": dropped_count,
+            "is_improved": is_improved,
+            "is_degraded": is_degraded,
+            "summary": (
+                f"Correctness delta: {corr_delta:+.2f} | "
+                f"Contradictions retracted: {retracted_count} | "
+                f"Supported dropped: {dropped_count} | "
+                f"Net status: {'IMPROVED' if is_improved else ('DEGRADED' if is_degraded else 'UNCHANGED')}"
+            ),
+        }

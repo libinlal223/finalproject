@@ -407,7 +407,7 @@ class TestGeminiAdapter:
 
             mock_configure.assert_called_once_with(api_key="AIzaSyTestGeminiKey1234567890abcdef")
             assert response.content == "Gemini answer"
-            assert response.model_id == "gemini-1.5-flash"
+            assert response.model_id == "gemini-3.5-flash-lite"
             assert response.provider == "gemini"
             assert response.prompt_tokens == 32
             assert response.completion_tokens == 78
@@ -612,7 +612,7 @@ class TestClientFactoryAndValidation:
         client = build_llm_client("gemini", LLMConfig())
         assert isinstance(client, GeminiLLMClient)
         assert client.provider_name() == "gemini"
-        assert client.default_model_id() == "gemini-1.5-flash"
+        assert client.default_model_id() == "gemini-3.5-flash-lite"
 
     def test_factory_case_insensitive_and_whitespace(self):
         c1 = build_llm_client("  MOCK  ", LLMConfig())

@@ -256,13 +256,15 @@ async def test_supported_and_contradicted_claims():
     mock_verifier.verify_claims.return_value = ClaimVerificationReport(
         results=[
             ClaimVerificationResult(
-                claim="Claim 1 is true",
+                claim_id="CLAIM-1",
+                claim_text="Claim 1 is true",
                 status=ClaimStatus.SUPPORTED,
                 evidence_refs=["https://example.com/verified-1"],
                 explanation="Verified by authoritative empirical source.",
             ),
             ClaimVerificationResult(
-                claim="Claim 2 is false",
+                claim_id="CLAIM-2",
+                claim_text="Claim 2 is false",
                 status=ClaimStatus.CONTRADICTED,
                 evidence_refs=["https://example.com/verified-2"],
                 explanation="Contradicted by empirical measurements.",

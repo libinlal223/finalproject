@@ -18,6 +18,11 @@ export const QueryForm: React.FC<QueryFormProps> = ({ onSubmit, isLoading }) => 
   const [maxRounds, setMaxRounds] = useState<number>(3);
   const [provider, setProvider] = useState<LLMProvider | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const isSubmittingRef = React.useRef(false);
+
+  React.useEffect(() => {
+    isSubmittingRef.current = false;
+  }, [isLoading]);
 
   const trimmed = query.trim();
   const isValidLength = trimmed.length >= 3 && trimmed.length <= 4000;
@@ -25,7 +30,8 @@ export const QueryForm: React.FC<QueryFormProps> = ({ onSubmit, isLoading }) => 
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!canSubmit) return;
+    if (!canSubmit || isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     onSubmit(trimmed, maxRounds, provider);
   };
 

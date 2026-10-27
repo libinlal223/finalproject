@@ -68,7 +68,12 @@ class BaseAgent(ABC):
             self._client = client
         else:
             settings = get_settings()
-            self._client = build_llm_client(settings.llm_provider.value, self._config)
+            provider = settings.get_agent_provider(self.role)
+            model_id = settings.get_agent_model_id(self.role)
+            cfg = self._config
+            if model_id and not cfg.model_id:
+                cfg.model_id = model_id
+            self._client = build_llm_client(provider, cfg)
 
         self._logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
 
@@ -105,6 +110,12 @@ class BaseAgent(ABC):
         if not raw:
             raise LLMValidationError(
                 f"Agent '{self.role.value}' returned an empty response."
+            )
+
+        # Explicitly check for output truncation from the LLM provider
+        if response.finish_reason == "length":
+            raise LLMValidationError(
+                f"Agent '{self.role.value}' output was truncated due to token limit budget (finish_reason='length')."
             )
 
         # 1. Strip markdown code fences if present (```json ... ``` or ``` ... ```)
@@ -156,19 +167,31 @@ class BaseAgent(ABC):
         user_prompt: str,
         schema: type[T],
         system_prompt: str | None = None,
+        max_tokens: int | None = None,
     ) -> tuple[T, LLMResponse]:
         """
         Send system and user messages to the client and return validated structured output.
         """
+        import inspect
+
         active_system = system_prompt or self.system_prompt
         messages = [
             LLMMessage(role="system", content=active_system),
             LLMMessage(role="user", content=user_prompt),
         ]
 
-        self._logger.debug("Executing prompt for agent '%s'", self.role.value)
         try:
-            response = await self._client.complete(messages)
+            complete_kwargs: dict = {
+                "max_tokens": max_tokens if max_tokens is not None else self._config.max_tokens,
+                "temperature": self._config.temperature,
+            }
+            if "json_mode" in inspect.signature(self._client.complete).parameters:
+                complete_kwargs["json_mode"] = getattr(self._config, "json_mode", False)
+
+            response = await self._client.complete(
+                messages,
+                **complete_kwargs,
+            )
         except LLMError:
             # Re-raise known application-level LLM errors directly
             raise

@@ -24,8 +24,9 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 import time
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 from app.llm.base import sanitize_error_message
 from app.models.schemas import EvidenceItem, RetrievalResponse, RetrievalStatus
@@ -40,26 +41,131 @@ _MAX_SNIPPET_LENGTH = 1000
 
 class DuckDuckGoSearchProvider(BaseSearchProvider):
     """
-    Asynchronous DuckDuckGo search provider.
+    Asynchronous DuckDuckGo search provider with layered fallback strategies.
     """
 
     def provider_name(self) -> str:
         return "ddg"
 
     def _sync_search(self, query: str, max_results: int) -> list[dict]:
-        """Perform the blocking DuckDuckGo query inside a worker thread."""
+        """Perform the search with layered fallbacks to handle DDG endpoint rate limits and blocks."""
+        # 1. Primary DDGS text search
         try:
             from duckduckgo_search import DDGS
 
-            with DDGS() as ddgs:
+            timeout_sec = max(2, min(int(self._config.timeout_seconds), 4))
+            with DDGS(timeout=timeout_sec) as ddgs:
                 results = ddgs.text(
                     keywords=query,
                     max_results=max_results,
                     safesearch="moderate" if self._config.safe_search else "off",
+                    backend="html",
                 )
-                return list(results) if results else []
-        except Exception:
-            raise
+                if results:
+                    return list(results)
+        except Exception as exc:
+            self._logger.debug("Primary DDGS text search unavailable (%s); attempting direct HTML endpoint.", exc)
+
+        # 2. Resilient Direct HTML query to https://html.duckduckgo.com/html/
+        try:
+            import httpx
+            from lxml.html import document_fromstring
+
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Referer": "https://html.duckduckgo.com/",
+            }
+            with httpx.Client(headers=headers, timeout=min(float(self._config.timeout_seconds), 5.0), follow_redirects=True) as client:
+                r = client.post("https://html.duckduckgo.com/html/", data={"q": query, "b": "", "kl": "wt-wt"})
+                if r.status_code == 200:
+                    tree = document_fromstring(r.content)
+                    results = []
+                    for el in tree.xpath("//div[h2]"):
+                        hrefs = el.xpath("./h2/a/@href") or el.xpath("./a/@href")
+                        titles = el.xpath("./h2/a//text()")
+                        snippets = el.xpath("./a[@class='result__snippet']//text()") or el.xpath("./a//text()")
+                        if hrefs:
+                            href = str(hrefs[0]).strip()
+                            if "uddg=" in href:
+                                qs = parse_qs(urlparse(href).query)
+                                if "uddg" in qs:
+                                    href = unquote(qs["uddg"][0])
+                            results.append({
+                                "title": "".join(titles).strip() or "Untitled",
+                                "href": href,
+                                "body": "".join(snippets).strip(),
+                            })
+                            if len(results) >= max_results:
+                                break
+                    if results:
+                        return results
+        except Exception as exc:
+            self._logger.debug("Direct DDG HTML search failed (%s); attempting reference fallback.", exc)
+
+        # 3. DuckDuckGo Instant Answer / Topic API
+        try:
+            import httpx
+
+            with httpx.Client(timeout=4.0) as client:
+                resp = client.get("https://api.duckduckgo.com/", params={"q": query, "format": "json"})
+                if resp.status_code == 200:
+                    data = resp.json()
+                    results = []
+                    if data.get("AbstractURL") and data.get("AbstractText"):
+                        results.append({
+                            "title": str(data.get("Heading") or data.get("AbstractSource") or "DuckDuckGo Summary"),
+                            "href": data["AbstractURL"],
+                            "body": data["AbstractText"],
+                        })
+                    for topic in data.get("RelatedTopics", []):
+                        if isinstance(topic, dict) and topic.get("FirstURL") and topic.get("Text"):
+                            results.append({
+                                "title": topic.get("Text", "")[:60],
+                                "href": topic["FirstURL"],
+                                "body": topic["Text"],
+                            })
+                            if len(results) >= max_results:
+                                break
+                    if results:
+                        return results
+        except Exception as exc:
+            self._logger.debug("DuckDuckGo Instant Answer API failed (%s); attempting encyclopedic search.", exc)
+
+        # 4. Authoritative open reference search via Wikipedia API
+        try:
+            import httpx
+
+            headers = {"User-Agent": "VADER-Academic-Debate/1.0 (https://github.com/vader; research@vader.org)"}
+            with httpx.Client(headers=headers, timeout=4.0) as client:
+                resp = client.get(
+                    "https://en.wikipedia.org/w/api.php",
+                    params={
+                        "action": "query",
+                        "list": "search",
+                        "srsearch": query,
+                        "srlimit": max_results,
+                        "format": "json",
+                    },
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    results = []
+                    for item in data.get("query", {}).get("search", []):
+                        title = item.get("title", "")
+                        page_title = title.replace(" ", "_")
+                        snippet = re.sub(r"<[^>]+>", "", item.get("snippet", "")).strip()
+                        results.append({
+                            "title": title,
+                            "href": f"https://en.wikipedia.org/wiki/{page_title}",
+                            "body": snippet,
+                        })
+                    if results:
+                        return results
+        except Exception as exc:
+            self._logger.debug("Encyclopedic fallback search failed: %s", exc)
+
+        return []
 
     async def search(
         self, query: str, max_results: int | None = None

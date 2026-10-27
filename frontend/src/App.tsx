@@ -6,12 +6,13 @@ import { FinalAnswerCard } from './components/FinalAnswerCard';
 import { DebateRoundsViewer } from './components/DebateRoundsViewer';
 import { AgentTraceViewer } from './components/AgentTraceViewer';
 import { EvidenceSources } from './components/EvidenceSources';
+import { ClaimVerificationPanel } from './components/ClaimVerificationPanel';
 import { ErrorMessage } from './components/ErrorMessage';
 import { submitQuery, ApiError } from './services/api';
 import type { LLMProvider, QueryResponse } from './types/api';
 import './App.css';
 
-type TabType = 'overview' | 'rounds' | 'trace' | 'evidence';
+type TabType = 'overview' | 'verification' | 'rounds' | 'trace' | 'evidence';
 
 export const App: React.FC = () => {
   const [response, setResponse] = useState<QueryResponse | null>(null);
@@ -31,6 +32,7 @@ export const App: React.FC = () => {
     maxRounds: number,
     provider: LLMProvider | null,
   ) => {
+    if (isLoading) return;
     setIsLoading(true);
     setError(null);
     setLastSubmitted({ query, maxRounds, provider });
@@ -125,6 +127,22 @@ export const App: React.FC = () => {
               <button
                 type="button"
                 role="tab"
+                id="tab-verification"
+                aria-selected={activeTab === 'verification'}
+                className={`nav-tab ${activeTab === 'verification' ? 'active' : ''}`}
+                onClick={() => setActiveTab('verification')}
+              >
+                <span>Claim Verification</span>
+                {response.verification_report && (
+                  <span className="tab-count-pill">
+                    {response.verification_report.results.length}
+                  </span>
+                )}
+              </button>
+
+              <button
+                type="button"
+                role="tab"
                 aria-selected={activeTab === 'rounds'}
                 className={`nav-tab ${activeTab === 'rounds' ? 'active' : ''}`}
                 onClick={() => setActiveTab('rounds')}
@@ -165,15 +183,22 @@ export const App: React.FC = () => {
                     status={response.status}
                     roundsCompleted={response.rounds_completed}
                     subtasks={response.subtasks}
+                    verdictSummary={response.verdict_summary}
+                    unresolvedUncertainties={response.unresolved_uncertainties}
                     onReset={handleReset}
                   />
 
-                  {/* Summary preview of debate rounds and evidence */}
+                  {/* Summary preview of debate rounds, verification, and evidence */}
                   <div className="overview-subsections">
+                    <ClaimVerificationPanel report={response.verification_report} />
                     <DebateRoundsViewer rounds={response.debate_rounds} />
                     <EvidenceSources sources={response.sources} />
                   </div>
                 </>
+              )}
+
+              {activeTab === 'verification' && (
+                <ClaimVerificationPanel report={response.verification_report} />
               )}
 
               {activeTab === 'rounds' && (

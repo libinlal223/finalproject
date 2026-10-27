@@ -58,7 +58,13 @@ class MockLLMClient(BaseLLMClient):
     def default_model_id(self) -> str:
         return "mock-model-v1"
 
-    async def complete(self, messages: list[LLMMessage]) -> LLMResponse:
+    async def complete(
+        self,
+        messages: list[LLMMessage],
+        max_tokens: int | None = None,
+        temperature: float | None = None,
+        json_mode: bool | None = None,
+    ) -> LLMResponse:
         self._validate_messages(messages)
         self._log_call(messages)
 
@@ -111,13 +117,13 @@ class MockLLMClient(BaseLLMClient):
             elif "You are Executor A" in sys_text:
                 from app.agents.executor_a import ExecutorAAgent
                 d = ExecutorAAgent.mock_output_dict()
-                if "Revise and strengthen" in messages[-1].content:
+                if "Revise and strengthen" in messages[-1].content or "DIRECTIVES FOR TARGETED REVISION" in messages[-1].content or "Critic's Evaluation" in messages[-1].content:
                     d["answer"] += " (revised with clarified definitions and boundary conditions)"
                 content = json.dumps(d)
             elif "You are Executor B" in sys_text:
                 from app.agents.executor_b import ExecutorBAgent
                 d = ExecutorBAgent.mock_output_dict()
-                if "Revise and strengthen" in messages[-1].content:
+                if "Revise and strengthen" in messages[-1].content or "DIRECTIVES FOR TARGETED REVISION" in messages[-1].content or "Critic's Evaluation" in messages[-1].content:
                     d["answer"] += " (revised with empirical nuance and counter-perspectives)"
                 content = json.dumps(d)
             elif "You are the Critic Agent" in sys_text:

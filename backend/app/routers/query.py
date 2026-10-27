@@ -12,7 +12,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 
 from app.config import Settings, get_settings
-from app.llm.base import LLMConfig, build_llm_client
+from app.llm.base import BaseLLMClient, LLMConfig, build_llm_client
 from app.models.schemas import QueryRequest, QueryResponse
 from app.orchestrator.orchestrator import DebateOrchestrator
 
@@ -38,24 +38,22 @@ async def submit_query(
     request: QueryRequest,
     settings: Annotated[Settings, Depends(get_settings)],
 ) -> QueryResponse:
-    """Execute adversarial collaborative debate for the given query."""
-    provider_name = (
-        request.llm_provider.value
-        if request.llm_provider
-        else settings.llm_provider.value
-    )
-    model_override = (
-        settings.llm_model_id
-        or (settings.groq_model_id if provider_name == "groq" else "")
-        or (settings.gemini_model_id if provider_name == "gemini" else "")
-    )
-    config = LLMConfig(
-        model_id=model_override,
-        temperature=settings.llm_temperature,
-        max_tokens=settings.llm_max_tokens,
-        timeout_seconds=settings.llm_timeout_seconds,
-    )
-    llm_client = build_llm_client(provider_name, config)
+    llm_client: BaseLLMClient | None = None
+    if request.llm_provider:
+        provider_name = request.llm_provider.value
+        model_override = (
+            settings.llm_model_id
+            or (settings.groq_model_id if provider_name == "groq" else "")
+            or (settings.gemini_model_id if provider_name == "gemini" else "")
+        )
+        config = LLMConfig(
+            model_id=model_override,
+            temperature=settings.llm_temperature,
+            max_tokens=settings.llm_max_tokens,
+            timeout_seconds=settings.llm_timeout_seconds,
+        )
+        llm_client = build_llm_client(provider_name, config)
+
     orchestrator = DebateOrchestrator(
         llm_client=llm_client,
         settings=settings,

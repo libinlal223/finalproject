@@ -79,6 +79,7 @@ class LLMConfig:
     timeout_seconds: int = 60
     max_retries: int = 3
     system_prompt: str | None = None
+    json_mode: bool = False
     extra: dict = field(default_factory=dict)
 
 
@@ -94,6 +95,22 @@ class LLMAuthenticationError(LLMError):
 
 class LLMRateLimitError(LLMError):
     """Raised when the provider returns a 429 / rate-limit response."""
+
+    def __init__(
+        self,
+        message: str,
+        retry_after: float | None = None,
+        limit_tokens: int | None = None,
+        used_tokens: int | None = None,
+        requested_tokens: int | None = None,
+        limit_type: str | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.retry_after = retry_after
+        self.limit_tokens = limit_tokens
+        self.used_tokens = used_tokens
+        self.requested_tokens = requested_tokens
+        self.limit_type = limit_type
 
 
 class LLMTimeoutError(LLMError):
@@ -187,7 +204,13 @@ class BaseLLMClient(ABC):
     # ── Abstract methods ──────────────────────────────────────────────────────
 
     @abstractmethod
-    async def complete(self, messages: list[LLMMessage]) -> LLMResponse:
+    async def complete(
+        self,
+        messages: list[LLMMessage],
+        max_tokens: int | None = None,
+        temperature: float | None = None,
+        json_mode: bool | None = None,
+    ) -> LLMResponse:
         """
         Send a list of messages to the LLM and return a single response.
 

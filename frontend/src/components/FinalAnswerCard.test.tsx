@@ -78,4 +78,56 @@ describe('FinalAnswerCard Component', () => {
     });
     expect(writeTextMock).toHaveBeenCalledWith('Answer to be copied.');
   });
+
+  it('renders verdict summary and unresolved uncertainties when provided', () => {
+    render(
+      <FinalAnswerCard
+        finalAnswer="Answer with adjudication rationale."
+        status="completed"
+        roundsCompleted={2}
+        subtasks={['Subtask 1']}
+        verdictSummary="Selected Executor A candidate because it successfully retracted contradicted claims and preserved supported axioms."
+        unresolvedUncertainties={[
+          'Exact thermodynamic efficiency under 0K boundary conditions remains experimentally unmeasured.',
+        ]}
+        onReset={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByTestId('verdict-summary')).toBeInTheDocument();
+    expect(screen.getByText(/Judge Adjudication Rationale/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Selected Executor A candidate because it successfully retracted contradicted claims/i),
+    ).toBeInTheDocument();
+
+    expect(screen.getByTestId('unresolved-uncertainties')).toBeInTheDocument();
+    expect(screen.getByText(/Epistemic Uncertainty & Unresolved Boundaries/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Exact thermodynamic efficiency under 0K boundary conditions remains experimentally unmeasured./i),
+    ).toBeInTheDocument();
+  });
+
+  it('renders unadjudicated fallback banner and error badge when debate halts on error', () => {
+    render(
+      <FinalAnswerCard
+        finalAnswer="[UNADJUDICATED FALLBACK CANDIDATE - NOT VERIFIED]\n\nCandidate text from Executor A."
+        status="error"
+        roundsCompleted={0}
+        subtasks={['Subtask 1']}
+        verdictSummary="Critique step failed; adjudication was skipped and unadjudicated fallback candidate used without Judge review."
+        unresolvedUncertainties={[
+          'Unverified candidate: Critic did not complete critique; verification-grounded adjudication was not performed.',
+        ]}
+        onReset={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByText(/Candidate Output \(Unadjudicated Fallback\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Halted on Error/i)).toBeInTheDocument();
+    expect(screen.getByText(/0 Rounds Completed/i)).toBeInTheDocument();
+    expect(screen.getByTestId('unadjudicated-warning')).toBeInTheDocument();
+    expect(screen.getByText(/Unadjudicated Fallback Notice:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Adjudication Fallback & Status Rationale/i)).toBeInTheDocument();
+    expect(screen.getByText(/Critique step failed/i)).toBeInTheDocument();
+  });
 });

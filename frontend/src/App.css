@@ -1614,3 +1614,576 @@
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ==========================================================================
+   Claim Verification Panel (cvp-*)
+   ========================================================================== */
+
+.cvp-root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeIn 0.25s ease;
+}
+
+/* Header */
+.cvp-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cvp-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+}
+
+.cvp-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Report-level status badges */
+.cvp-report-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-full, 999px);
+}
+.cvp-report-status--completed { background: rgba(52, 211, 153, 0.12); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.3); }
+.cvp-report-status--partial   { background: rgba(251, 191, 36, 0.12); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.3); }
+.cvp-report-status--failed    { background: rgba(248, 113, 113, 0.12); color: #F87171; border: 1px solid rgba(248, 113, 113, 0.3); }
+.cvp-report-status--unavailable { background: rgba(148, 163, 184, 0.12); color: #94A3B8; border: 1px solid rgba(148, 163, 184, 0.25); }
+.cvp-report-status--no-claims { background: rgba(148, 163, 184, 0.08); color: #94A3B8; border: 1px solid rgba(148, 163, 184, 0.2); }
+
+/* Summary bar */
+.cvp-summary-bar {
+  background: var(--surface-1, rgba(255,255,255,0.03));
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cvp-summary-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary, #CBD5E1);
+  line-height: 1.5;
+  margin: 0;
+}
+.cvp-summary-note {
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748B);
+  margin: 0;
+}
+
+/* Stats row */
+.cvp-stats-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cvp-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: var(--surface-1, rgba(255,255,255,0.03));
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.07));
+  border-radius: 10px;
+  padding: 10px 16px;
+  min-width: 72px;
+}
+.cvp-stat-count {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.cvp-stat-label { font-size: 0.68rem; color: var(--text-muted, #64748B); text-transform: uppercase; letter-spacing: 0.04em; }
+.cvp-stat-count--total        { color: var(--text-primary, #E2E8F0); }
+.cvp-stat-count--supported    { color: #34D399; }
+.cvp-stat-count--contradicted { color: #F87171; }
+.cvp-stat-count--inconclusive { color: #FBBF24; }
+.cvp-stat-count--not-checked  { color: #94A3B8; }
+.cvp-stat-count--evidence     { color: #A5B4FC; }
+
+/* Disclaimer */
+.cvp-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(165, 180, 252, 0.06);
+  border: 1px solid rgba(165, 180, 252, 0.15);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #94A3B8;
+  font-size: 0.79rem;
+  line-height: 1.5;
+}
+.cvp-disclaimer svg { flex-shrink: 0; margin-top: 1px; color: #A5B4FC; }
+
+/* Claims list */
+.cvp-claims-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Claim card */
+.cvp-claim-card {
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.08));
+  border-radius: 10px;
+  background: var(--surface-1, rgba(255,255,255,0.03));
+  overflow: hidden;
+  transition: border-color 0.18s;
+}
+.cvp-claim-card--supported    { border-left: 3px solid rgba(52, 211, 153, 0.6); }
+.cvp-claim-card--contradicted { border-left: 3px solid rgba(248, 113, 113, 0.6); }
+.cvp-claim-card--insufficient_evidence { border-left: 3px solid rgba(251, 191, 36, 0.6); }
+.cvp-claim-card--not_checked  { border-left: 3px solid rgba(148, 163, 184, 0.4); }
+
+.cvp-claim-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.cvp-claim-header:hover { background: rgba(255,255,255,0.03); }
+.cvp-claim-header:focus { outline: 2px solid #A5B4FC; outline-offset: -2px; }
+
+.cvp-claim-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.cvp-claim-id {
+  font-size: 0.70rem;
+  font-weight: 700;
+  color: var(--text-muted, #64748B);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.cvp-claim-text {
+  flex: 1;
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary, #CBD5E1);
+  line-height: 1.45;
+}
+
+/* Claim-level status badge */
+.cvp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--radius-full, 999px);
+  white-space: nowrap;
+}
+.cvp-badge--supported    { background: rgba(52,211,153,0.12); color: #34D399; border: 1px solid rgba(52,211,153,0.3); }
+.cvp-badge--contradicted { background: rgba(248,113,113,0.12); color: #F87171; border: 1px solid rgba(248,113,113,0.3); }
+.cvp-badge--inconclusive { background: rgba(251,191,36,0.12); color: #FBBF24; border: 1px solid rgba(251,191,36,0.3); }
+.cvp-badge--not-checked  { background: rgba(148,163,184,0.10); color: #94A3B8; border: 1px solid rgba(148,163,184,0.2); }
+
+/* Claim body */
+.cvp-claim-body {
+  padding: 0 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeIn 0.18s ease;
+}
+.cvp-section-label {
+  font-size: 0.70rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted, #64748B);
+  margin: 0 0 6px;
+}
+.cvp-explanation-text,
+.cvp-limitations-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #CBD5E1);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Evidence list */
+.cvp-evidence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cvp-evidence-ref {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.07));
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.cvp-evidence-ref-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cvp-rel-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cvp-rel-tag--supports    { background: rgba(52,211,153,0.12); color: #34D399; }
+.cvp-rel-tag--contradicts { background: rgba(248,113,113,0.12); color: #F87171; }
+.cvp-rel-tag--inconclusive{ background: rgba(251,191,36,0.12); color: #FBBF24; }
+
+.cvp-evidence-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+  color: #A5B4FC;
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: color 0.15s;
+}
+.cvp-evidence-link:hover { color: #C7D2FE; text-decoration: underline; }
+.cvp-evidence-host {
+  font-size: 0.70rem;
+  color: var(--text-muted, #64748B);
+  white-space: nowrap;
+}
+.cvp-evidence-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cvp-expand-btn {
+  background: transparent;
+  border: none;
+  padding: 3px;
+  cursor: pointer;
+  color: var(--text-muted, #64748B);
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+  margin-left: auto;
+}
+.cvp-expand-btn:hover { color: var(--text-secondary, #CBD5E1); background: rgba(255,255,255,0.05); }
+
+.cvp-evidence-excerpt {
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.2);
+  border-left: 2px solid var(--border-medium, rgba(255,255,255,0.12));
+  border-radius: 4px;
+  font-size: 0.80rem;
+  color: var(--text-muted, #64748B);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Inline notices */
+.cvp-not-checked-notice,
+.cvp-inconclusive-notice,
+.cvp-supported-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+.cvp-not-checked-notice  { background: rgba(148,163,184,0.08); color: #94A3B8; }
+.cvp-inconclusive-notice { background: rgba(251,191,36,0.08);  color: #FBBF24; }
+.cvp-supported-notice    { background: rgba(52,211,153,0.08);  color: #6EE7B7; }
+
+/* Empty / unavailable state */
+.cvp-empty-notice {
+  background: var(--surface-1, rgba(255,255,255,0.03));
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.07));
+  border-radius: 10px;
+  padding: 20px 18px;
+  color: var(--text-muted, #64748B);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.cvp-empty-notice p { margin: 0; }
+
+/* Chevron */
+.cvp-chevron {
+  flex-shrink: 0;
+  color: var(--text-muted, #64748B);
+}
+
+/* ==========================================================================
+   Priority 2: Structured Debate Reasoning, Critic Audit, and Verdict
+   ========================================================================== */
+
+.executor-revision-notes {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(99, 102, 241, 0.08);
+  border-left: 3px solid #6366F1;
+  border-radius: var(--radius-sm, 4px);
+  font-size: 0.80rem;
+  line-height: 1.45;
+}
+
+.revision-notes-label {
+  color: #A5B4FC;
+  font-weight: 600;
+}
+
+.revision-notes-text {
+  color: #CBD5E1;
+}
+
+.addressed-issues-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.addressed-issues-label {
+  font-size: 0.75rem;
+  color: var(--text-muted, #94A3B8);
+  font-weight: 600;
+}
+
+.addressed-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.addressed-pill {
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.critic-issues-list {
+  margin-top: 14px;
+  border-top: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  padding-top: 12px;
+}
+
+.issues-list-heading {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary, #94A3B8);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.issues-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.issue-item-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.issue-item-card.severity-high {
+  border-left: 3px solid #EF4444;
+}
+
+.issue-item-card.severity-medium {
+  border-left: 3px solid #F59E0B;
+}
+
+.issue-item-card.severity-low {
+  border-left: 3px solid #3B82F6;
+}
+
+.issue-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.issue-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.issue-severity-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.issue-severity-badge.badge-high {
+  background: rgba(239, 68, 68, 0.2);
+  color: #F87171;
+}
+
+.issue-severity-badge.badge-medium {
+  background: rgba(245, 158, 11, 0.2);
+  color: #FCD34D;
+}
+
+.issue-severity-badge.badge-low {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93C5FD;
+}
+
+.issue-id-tag {
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-muted, #94A3B8);
+}
+
+.issue-claim-link {
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  background: rgba(99, 102, 241, 0.15);
+  color: #A5B4FC;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.issue-target-tag {
+  font-size: 0.70rem;
+  color: var(--text-muted, #64748B);
+}
+
+.issue-claim-name {
+  color: #E2E8F0;
+  font-size: 0.82rem;
+}
+
+.issue-explanation {
+  color: #CBD5E1;
+  line-height: 1.45;
+}
+
+.issue-recommendation {
+  font-size: 0.80rem;
+  color: #94A3B8;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+/* Verdict Summary Callout */
+.verdict-summary-callout {
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.08));
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 8px;
+}
+
+.verdict-summary-header {
+  margin-bottom: 6px;
+}
+
+.verdict-summary-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #A5B4FC;
+}
+
+.verdict-summary-text {
+  font-size: 0.90rem;
+  color: #F1F5F9;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Unresolved Uncertainties Section */
+.unresolved-uncertainties-section {
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 8px;
+}
+
+.uncertainties-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #FBBF24;
+  margin: 0 0 10px;
+}
+
+.uncertainties-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.uncertainty-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: #E2E8F0;
+  line-height: 1.5;
+}
+
+.uncertainty-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #F59E0B;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+

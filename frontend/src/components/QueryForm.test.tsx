@@ -103,4 +103,23 @@ describe('QueryForm Component', () => {
     fireEvent.click(submitBtn);
     expect(onSubmit).not.toHaveBeenCalled();
   });
+
+  it('prevents rapid double-click duplicate submissions', () => {
+    const onSubmit = vi.fn();
+    render(<QueryForm onSubmit={onSubmit} isLoading={false} />);
+
+    const textarea = screen.getByPlaceholderText(/Type your complex analytical question here/i);
+    fireEvent.change(textarea, { target: { value: 'Valid test query for debounce' } });
+
+    const submitBtn = screen.getByRole('button', { name: /Start Multi-Agent Debate/i });
+    expect(submitBtn).not.toBeDisabled();
+
+    // First click
+    fireEvent.click(submitBtn);
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+
+    // Immediate second click before re-render
+    fireEvent.click(submitBtn);
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+  });
 });

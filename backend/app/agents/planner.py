@@ -43,6 +43,7 @@ class PlannerAgent(BaseAgent):
         '  "expected_format": "Concise description of the expected synthesis format",\n'
         '  "evidence_needed": ["Topic or empirical claim requiring external evidence", ...]\n'
         "}\n\n"
+        "Keep each field concise and focused (limit subtasks to 2-4 key items, each under 20 words). "
         "Ensure the JSON is strictly valid. Do not include markdown code fences or conversational text."
     )
 

@@ -368,7 +368,7 @@ class TestClaimVerificationService:
         report_timeout = await service.verify_claims(
             claims, evidence=[], retrieval_status=RetrievalStatus.TIMEOUT
         )
-        assert report_timeout.results[0].status == ClaimStatus.INSUFFICIENT_EVIDENCE
+        assert report_timeout.results[0].status == ClaimStatus.NOT_CHECKED
         assert "timeout" in report_timeout.results[0].explanation.lower()
         assert "does not imply" in report_timeout.results[0].explanation.lower()
 
@@ -376,7 +376,7 @@ class TestClaimVerificationService:
         report_rate = await service.verify_claims(
             claims, evidence=[], retrieval_status=RetrievalStatus.RATE_LIMITED
         )
-        assert report_rate.results[0].status == ClaimStatus.INSUFFICIENT_EVIDENCE
+        assert report_rate.results[0].status == ClaimStatus.NOT_CHECKED
         assert "rate_limited" in report_rate.results[0].explanation.lower()
 
     async def test_empty_evidence_handled_without_llm_call(self):

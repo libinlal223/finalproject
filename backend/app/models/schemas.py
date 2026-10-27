@@ -179,6 +179,18 @@ class ExecutorOutput(BaseModel):
         default_factory=list,
         description="Factual or empirical claims that warrant verification.",
     )
+    addressed_issues: list[str] = Field(
+        default_factory=list,
+        description="IDs of critique issues addressed in this candidate or revision (e.g. ['ISSUE-1']).",
+    )
+    retained_claims: list[str] = Field(
+        default_factory=list,
+        description="Supported claims intentionally preserved during revision.",
+    )
+    revision_notes: str | None = Field(
+        default=None,
+        description="Concise description of changes made since prior round.",
+    )
 
 
 class CritiqueSeverity(str, Enum):
@@ -191,6 +203,14 @@ class CritiqueIssue(BaseModel):
     """A specific flaw, contradiction, or unsupported claim found by the Critic."""
 
     issue_id: str = Field(description="Unique issue key, e.g. 'ISSUE-1'.")
+    claim_id: str | None = Field(
+        default=None,
+        description="Associated claim ID from verification report if applicable, e.g. 'CLAIM-1'.",
+    )
+    verification_status: str | None = Field(
+        default=None,
+        description="Verification status if linked to a verified claim ('contradicted', 'insufficient_evidence', etc.).",
+    )
     target: str = Field(
         description="Which candidate is affected: 'executor_a', 'executor_b', or 'both'.",
     )
@@ -264,6 +284,18 @@ class JudgeOutput(BaseModel):
         min_length=1,
         description="Concise rationale for the final adjudication decision.",
     )
+    adjudication_rationale: str | None = Field(
+        default=None,
+        description="Detailed explanation of why this synthesis was chosen over flawed or unverified alternatives.",
+    )
+    preferred_candidate: str | None = Field(
+        default=None,
+        description="Which candidate was more grounded, or 'synthesis' if mutually complementary.",
+    )
+    addressed_issues: list[str] = Field(
+        default_factory=list,
+        description="Critique issue IDs successfully addressed in the final verdict.",
+    )
 
 
 # ─── Evidence / source ────────────────────────────────────────────────────────
@@ -315,30 +347,120 @@ class ClaimStatus(str, Enum):
     SUPPORTED = "supported"
     CONTRADICTED = "contradicted"
     INSUFFICIENT_EVIDENCE = "insufficient_evidence"
+    NOT_CHECKED = "not_checked"
+
+
+class VerificationReportStatus(str, Enum):
+    """Overall status of the verification report for a query."""
+    COMPLETED = "completed"               # All submitted claims were evaluated
+    PARTIAL = "partial"                   # Some claims evaluated, some not
+    FAILED = "failed"                     # Verification service encountered a fatal error
+    UNAVAILABLE = "unavailable"           # Retrieval layer was not available
+    NO_CLAIMS = "no_claims"               # No eligible claims were found to verify
+
+
+class VerificationEvidenceRef(BaseModel):
+    """A rich reference to a single piece of evidence used in claim verification."""
+
+    title: str = Field(description="Title of the source document or page.")
+    url: str = Field(description="URL of the source.")
+    excerpt: str = Field(default="", description="Relevant excerpt from the source used in evaluation.")
+    relationship: str = Field(
+        default="",
+        description="How this source relates to the claim: 'supports', 'contradicts', or 'inconclusive'.",
+    )
+    retrieval_status: str | None = Field(
+        default=None,
+        description="Provider retrieval status when this evidence was fetched.",
+    )
 
 
 class ClaimVerificationResult(BaseModel):
     """Verification assessment for an individual factual claim."""
 
-    claim: str = Field(description="The original claim evaluated.")
-    status: ClaimStatus = Field(description="Assessment status based on evidence.")
-    evidence_refs: list[str] = Field(
-        default_factory=list,
-        description="URLs or titles of verified evidence items directly cited.",
+    claim_id: str = Field(
+        description="Stable identifier for this claim within the report, e.g. 'CLAIM-1'.",
     )
+    claim_text: str = Field(
+        default="",
+        description="The exact factual statement being assessed.",
+    )
+    status: ClaimStatus = Field(description="Assessment status based on evidence.")
     explanation: str = Field(
         min_length=1,
         description="Concise rationale explaining the evidence support, contradiction, or insufficiency.",
     )
+    evidence: list[VerificationEvidenceRef] = Field(
+        default_factory=list,
+        description="Rich references to evidence items relevant to this claim.",
+    )
+    limitations: str | None = Field(
+        default=None,
+        description="Relevant uncertainty, missing evidence, or scope boundaries for this result.",
+    )
+    # Legacy field preserved for backward-compatible LLM parsing and existing tests
+    claim: str = Field(
+        default="",
+        description="[Deprecated] Use claim_text. The original claim string returned by the LLM.",
+        exclude=True,
+    )
+    evidence_refs: list[str] = Field(
+        default_factory=list,
+        description="[Deprecated] Use evidence[].url. Legacy URL reference list for LLM output parsing.",
+        exclude=True,
+    )
     uncertainty: str | None = Field(
         default=None,
-        description="Explicit uncertainties, source limitations, or conflicting evidence.",
+        description="[Deprecated] Use limitations. Explicit uncertainties noted by the LLM.",
+        exclude=True,
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _sync_fields_before(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            c_text = data.get("claim_text") or data.get("claim") or ""
+            data["claim_text"] = c_text
+            data["claim"] = c_text
+            lim = data.get("limitations") if data.get("limitations") is not None else data.get("uncertainty")
+            data["limitations"] = lim
+            data["uncertainty"] = lim
+            ev = data.get("evidence", [])
+            ev_refs = data.get("evidence_refs", [])
+            if ev_refs and not ev:
+                data["evidence"] = [
+                    {"title": u, "url": u, "excerpt": "", "relationship": "relevant"}
+                    for u in ev_refs
+                ]
+            elif ev and not ev_refs:
+                data["evidence_refs"] = [
+                    (item.url if hasattr(item, "url") else item.get("url", ""))
+                    for item in ev
+                    if (hasattr(item, "url") and item.url) or (isinstance(item, dict) and item.get("url"))
+                ]
+        return data
+
+    @model_validator(mode="after")
+    def _sync_fields_after(self) -> ClaimVerificationResult:
+        if self.evidence and not self.evidence_refs:
+            self.evidence_refs = [e.url for e in self.evidence if e.url]
+        if self.limitations and not self.uncertainty:
+            self.uncertainty = self.limitations
+        if self.claim_text and not self.claim:
+            self.claim = self.claim_text
+        return self
 
 
 class ClaimVerificationReport(BaseModel):
     """Aggregated claim verification report produced by the claim-checking service."""
 
+    report_status: VerificationReportStatus = Field(
+        default=VerificationReportStatus.NO_CLAIMS,
+        description=(
+            "Overall status of the verification process: completed, partial, failed, "
+            "unavailable, or no_claims."
+        ),
+    )
     results: list[ClaimVerificationResult] = Field(
         default_factory=list,
         description="Individual claim verification findings.",
@@ -349,7 +471,15 @@ class ClaimVerificationReport(BaseModel):
     )
     evidence_count: int = Field(
         default=0,
-        description="Total number of evidence items considered.",
+        description="Total number of evidence items considered across all claims.",
+    )
+    claims_checked: int = Field(
+        default=0,
+        description="Number of claims that were actively evaluated (not skipped).",
+    )
+    claims_not_checked: int = Field(
+        default=0,
+        description="Number of claims that were submitted but could not be evaluated.",
     )
 
 
@@ -401,6 +531,22 @@ class DebateRound(BaseModel):
         default=False,
         description="True if similarity exceeded the threshold in this round.",
     )
+    issues: list[CritiqueIssue] = Field(
+        default_factory=list,
+        description="Structured findings from the Critic for this round.",
+    )
+    addressed_issues: list[str] = Field(
+        default_factory=list,
+        description="Issue IDs addressed by the executors in this round.",
+    )
+    executor_a_notes: str | None = Field(
+        default=None,
+        description="Summary of changes or approach for Executor A in this round.",
+    )
+    executor_b_notes: str | None = Field(
+        default=None,
+        description="Summary of changes or approach for Executor B in this round.",
+    )
 
 
 # ─── Query response ───────────────────────────────────────────────────────────
@@ -429,6 +575,22 @@ class QueryResponse(BaseModel):
     sources: list[EvidenceItem] = Field(
         default_factory=list,
         description="All evidence items surfaced across all rounds.",
+    )
+    verification_report: ClaimVerificationReport | None = Field(
+        default=None,
+        description=(
+            "Structured claim verification report. Present when the system attempted "
+            "to verify factual claims from the executor candidates. Null only when the "
+            "debate failed before evidence retrieval could be attempted."
+        ),
+    )
+    verdict_summary: str | None = Field(
+        default=None,
+        description="Judge's verdict summary explaining the rationale for the final answer.",
+    )
+    unresolved_uncertainties: list[str] = Field(
+        default_factory=list,
+        description="Genuine uncertainties preserved in the final adjudication.",
     )
     error_message: str | None = Field(
         default=None,

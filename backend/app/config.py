@@ -14,6 +14,7 @@ import logging
 import os
 from enum import Enum
 from functools import lru_cache
+from typing import Any
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -116,6 +117,22 @@ class Settings(BaseSettings):
     llm_timeout_seconds: int = Field(default=60, ge=1, le=300)
     llm_max_retries: int = Field(default=3, ge=0, le=10)
 
+    # ── Agent-specific LLM assignments ───────────────────────────────────────
+    planner_provider: LLMProvider | None = Field(default=None, description="Provider override for Planner")
+    planner_model_id: str = Field(default="", description="Model override for Planner")
+
+    executor_a_provider: LLMProvider | None = Field(default=None, description="Provider override for Executor A")
+    executor_a_model_id: str = Field(default="", description="Model override for Executor A")
+
+    executor_b_provider: LLMProvider | None = Field(default=None, description="Provider override for Executor B")
+    executor_b_model_id: str = Field(default="", description="Model override for Executor B")
+
+    critic_provider: LLMProvider | None = Field(default=None, description="Provider override for Critic")
+    critic_model_id: str = Field(default="", description="Model override for Critic")
+
+    judge_provider: LLMProvider | None = Field(default=None, description="Provider override for Judge")
+    judge_model_id: str = Field(default="", description="Model override for Judge")
+
     # ── Debate orchestrator ───────────────────────────────────────────────────
     debate_max_rounds: int = Field(default=3, ge=1, le=10)
     debate_similarity_threshold: float = Field(
@@ -167,6 +184,55 @@ class Settings(BaseSettings):
         if self.llm_provider == LLMProvider.GEMINI:
             return bool(self.gemini_api_key)
         return False
+
+    def get_agent_provider(self, role: Any) -> str:
+        """Resolve the active LLM provider for a specific agent role."""
+        from app.models.schemas import AgentRole
+
+        role_str = role.value if isinstance(role, AgentRole) else str(role)
+
+        if self.llm_provider == LLMProvider.MOCK:
+            role_map = {
+                AgentRole.PLANNER.value: self.planner_provider,
+                AgentRole.EXECUTOR_A.value: self.executor_a_provider,
+                AgentRole.EXECUTOR_B.value: self.executor_b_provider,
+                AgentRole.CRITIC.value: self.critic_provider,
+                AgentRole.JUDGE.value: self.judge_provider,
+            }
+            override = role_map.get(role_str)
+            return override.value if override else "mock"
+
+        # Multi-agent target configuration:
+        # Planner: groq, Executor A: groq, Executor B: gemini, Critic: gemini, Judge: groq
+        if role_str == AgentRole.PLANNER.value:
+            return self.planner_provider.value if self.planner_provider else "groq"
+        if role_str == AgentRole.EXECUTOR_A.value:
+            return self.executor_a_provider.value if self.executor_a_provider else "groq"
+        if role_str == AgentRole.EXECUTOR_B.value:
+            return self.executor_b_provider.value if self.executor_b_provider else "gemini"
+        if role_str == AgentRole.CRITIC.value:
+            return self.critic_provider.value if self.critic_provider else "gemini"
+        if role_str == AgentRole.JUDGE.value:
+            return self.judge_provider.value if self.judge_provider else "groq"
+        return self.llm_provider.value
+
+    def get_agent_model_id(self, role: Any) -> str:
+        """Resolve the model ID for a specific agent role."""
+        from app.models.schemas import AgentRole
+
+        role_str = role.value if isinstance(role, AgentRole) else str(role)
+
+        if role_str == AgentRole.PLANNER.value:
+            return self.planner_model_id or self.groq_model_id or "openai/gpt-oss-120b"
+        if role_str == AgentRole.EXECUTOR_A.value:
+            return self.executor_a_model_id or self.groq_model_id or "openai/gpt-oss-120b"
+        if role_str == AgentRole.EXECUTOR_B.value:
+            return self.executor_b_model_id or self.gemini_model_id or "gemini-3.5-flash-lite"
+        if role_str == AgentRole.CRITIC.value:
+            return self.critic_model_id or self.gemini_model_id or "gemini-3.5-flash-lite"
+        if role_str == AgentRole.JUDGE.value:
+            return self.judge_model_id or self.groq_model_id or "openai/gpt-oss-120b"
+        return self.llm_model_id
 
     def configure_logging(self) -> None:
         """Apply the configured log level to the root logger."""
