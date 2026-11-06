@@ -45,6 +45,7 @@ from app.models.schemas import (
     VerificationEvidenceRef,
     VerificationReportStatus,
 )
+from app.retrieval.relevance import is_result_topic_relevant
 
 logger = logging.getLogger(__name__)
 
@@ -130,6 +131,26 @@ def _assign_claim_ids(results: list[ClaimVerificationResult]) -> None:
     """Mutate each result to assign a stable claim_id in-place."""
     for idx, result in enumerate(results, 1):
         result.claim_id = f"CLAIM-{idx}"
+
+
+def _extract_time_or_met_assertions(claim_text: str) -> list[str]:
+    """
+    Extract exact timestamps, times of day, or mission elapsed times (MET).
+    e.g. '20:17:40 UTC', '20:17:40', '20:17', '102:45:40', '102 hours, 45 minutes'.
+    """
+    patterns = [
+        r"\b\d{1,2}:\d{2}:\d{2}(?:\s*(?:utc|gmt|est|edt|cst|pdt|am|pm))?\b",
+        r"\b\d{1,2}:\d{2}(?:\s*(?:utc|gmt|est|edt|cst|pdt|am|pm))\b",
+        r"\b\d{1,3}\s*hours?[,\s]+\d{1,2}\s*minutes?(?:[,\s]+\d{1,2}\s*seconds?)?\b",
+        r"\b\d{1,3}:\d{2}:\d{2}\b",
+    ]
+    found = []
+    for pat in patterns:
+        for m in re.finditer(pat, claim_text, re.IGNORECASE):
+            s = m.group(0).strip()
+            if s and s not in found:
+                found.append(s)
+    return found
 
 
 class ClaimVerificationService:
@@ -304,6 +325,19 @@ class ClaimVerificationService:
                 uncertainty = r.get("uncertainty")
                 limitations = str(uncertainty).strip() if uncertainty else None
 
+                # Discard irrelevant sources (e.g. football search results for space claims, gardening, etc.)
+                topic_valid_refs = [
+                    u for u in valid_refs
+                    if u in c_evidence_map and is_result_topic_relevant(evaluated_claim, c_evidence_map[u])
+                ]
+                if status == ClaimStatus.SUPPORTED and not topic_valid_refs:
+                    status = ClaimStatus.INSUFFICIENT_EVIDENCE
+                    explanation = "Retrieved sources are unrelated to the claim topic (e.g. sports or off-topic content) and do not support the claim."
+                    if not limitations:
+                        limitations = "No topic-relevant supporting evidence retrieved."
+                valid_refs = topic_valid_refs
+
+
                 # Rule 1: Evidence from an unrelated claim cannot support the current claim
                 if status == ClaimStatus.SUPPORTED and not valid_refs:
                     status = ClaimStatus.INSUFFICIENT_EVIDENCE
@@ -311,7 +345,36 @@ class ClaimVerificationService:
                     if not limitations:
                         limitations = "No corroborating evidence retrieved for this specific claim."
 
-                # Rule 2: Precise numerical quantity check (absent quantity remains inconclusive)
+                # Rule 2: Exact touchdown time, timestamp, or mission elapsed time (MET) check
+                if status == ClaimStatus.SUPPORTED:
+                    time_assertions = _extract_time_or_met_assertions(evaluated_claim)
+                    if time_assertions:
+                        supporting_text = " ".join([c_evidence_map[u].snippet.lower() for u in valid_refs if u in c_evidence_map])
+                        time_corroborated = False
+                        for t in time_assertions:
+                            t_clean = t.lower()
+                            digits_time = re.search(r"\b\d{1,3}:\d{2}(?::\d{2})?\b", t_clean)
+                            if (digits_time and digits_time.group(0) in supporting_text) or t_clean in supporting_text:
+                                time_corroborated = True
+                                break
+                        if not time_corroborated:
+                            status = ClaimStatus.INSUFFICIENT_EVIDENCE
+                            has_date = bool(re.search(r"\b(?:july\s+20|20\s+july|1969)\b", evaluated_claim.lower()))
+                            date_in_text = bool(re.search(r"\b(?:july\s+20|20\s+july|1969)\b", supporting_text))
+                            time_str = ", ".join(time_assertions)
+                            if has_date and date_in_text:
+                                explanation = (
+                                    f"Retrieved evidence corroborates the mission landing date (July 20, 1969), but does not establish "
+                                    f"the exact touchdown time ({time_str}) or mission elapsed time."
+                                )
+                            else:
+                                explanation = (
+                                    f"Retrieved evidence does not establish the exact touchdown time or mission elapsed time "
+                                    f"({time_str}) asserted in the claim."
+                                )
+                            limitations = f"Exact touchdown time ({time_str}) uncorroborated in retrieved evidence."
+
+                # Rule 3: Precise numerical quantity check (absent quantity remains inconclusive)
                 if status == ClaimStatus.SUPPORTED:
                     quant_matches = [m.group(0).strip() for m in number_pattern.finditer(evaluated_claim)]
                     significant_quant = [

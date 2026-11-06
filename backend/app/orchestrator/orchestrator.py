@@ -280,6 +280,24 @@ class DebateOrchestrator:
         if not text or not verifications:
             return text, uncertainties
 
+        # 1. Clean up repeated machine-generated warning blocks from the main prose
+        cleaned_text = re.sub(
+            r"\s*\[(?:Unverified\s*/\s*Inconclusive|Contradicted\s+by\s+evidence):[^\]]+\]",
+            "",
+            text,
+            flags=re.IGNORECASE,
+        )
+
+        # 2. Prevent false verification: if prose claims an inconclusive or not-checked claim was "verified"
+        # qualify it explicitly so the verification status is preserved
+        cleaned_text = re.sub(
+            r"\b(?:has\s+been\s+|is\s+|was\s+|were\s+)?(?:verified|confirmed|corroborated|proven)\s+by\s+[^.,;\n]+\b",
+            "reported in records [unverified in retrieved evidence]",
+            cleaned_text,
+            flags=re.IGNORECASE,
+        )
+
+
         stopwords = {
             "the", "and", "that", "this", "with", "from", "for", "have", "been", "will",
             "would", "could", "should", "were", "they", "their", "which", "about", "there",
@@ -292,15 +310,9 @@ class DebateOrchestrator:
             re.IGNORECASE,
         )
 
-        qualification_markers = (
-            "[unverified", "[inconclusive", "[contradicted", "unconfirmed",
-            "not corroborated", "disputed", "remains uncertain", "insufficient evidence",
-            "lack of empirical", "according to unverified", "it is claimed", "is hypothesized",
-            "unverified quantitative claim", "unverified claim"
-        )
-
         existing_uncertainties_lower = " ".join(uncertainties).lower()
-        modified_text = text
+        key_uncertainty_entries: list[str] = []
+        seen_entry_keys: set[str] = set()
 
         for v in verifications:
             if v.status == ClaimStatus.SUPPORTED:
@@ -312,107 +324,48 @@ class DebateOrchestrator:
 
             is_contradicted = (v.status == ClaimStatus.CONTRADICTED)
             status_desc = "contradicted by evidence" if is_contradicted else "inconclusive / unverified by evidence"
-            adj_tag = (
-                f" [Contradicted by evidence: {v.explanation}]"
-                if is_contradicted
-                else f" [Unverified / Inconclusive: {v.explanation}]"
-            )
 
-            # 1. Identify quantitative figures in claim
+            # Identify quantitative figures in claim
             quant_matches = [m.group(0).strip() for m in number_pattern.finditer(claim_text)]
             significant_quant = [
                 q for q in quant_matches
                 if len(q) > 1 or any(c in q for c in "%$€£.") or not q.isdigit() or (q.isdigit() and len(q) >= 3)
             ]
 
-            # 2. Extract qualitative content tokens (named entities, subjects, actions)
-            raw_tokens = re.findall(r"\b[a-zA-Z0-9\-\.]{3,}\b", claim_text)
-            content_tokens = [t.lower() for t in raw_tokens if t.lower() not in stopwords]
-
-            # Split text into paragraphs to preserve overall structure
-            paragraphs = modified_text.split("\n\n")
-            new_paragraphs = []
-            claim_flagged = False
-
-            for para in paragraphs:
-                if not para.strip():
-                    new_paragraphs.append(para)
-                    continue
-
-                # Don't modify metadata banners or disclosure sections
-                if para.startswith("[UNADJUDICATED") or para.startswith("[UNVERIFIED") or para.startswith("[CONTRADICTED"):
-                    new_paragraphs.append(para)
-                    continue
-
-                # Split paragraph into sentences preserving bracketed tags and punctuation
-                sentence_parts = re.split(r"(?:(?<=[.!?])|(?<=[\]\)]))\s+", para)
-                new_sentences = []
-
-                for s in sentence_parts:
-                    s_stripped = s.strip()
-                    if not s_stripped:
-                        new_sentences.append(s)
-                        continue
-
-                    s_lower = s_stripped.lower()
-
-                    # If this assertion already has this specific claim tag or standalone bracket tag, skip
-                    if adj_tag.strip().lower() in s_lower or (s_stripped.startswith("[") and s_stripped.endswith("]")):
-                        new_sentences.append(s)
-                        continue
-
-                    # Check match:
-                    quant_in_s = [q for q in significant_quant if q.lower() in s_lower]
-                    s_tokens = set(re.findall(r"\b[a-zA-Z0-9\-\.]{3,}\b", s_lower))
-                    token_overlap = [t for t in content_tokens if t in s_tokens]
-                    token_ratio = len(token_overlap) / max(1, len(content_tokens))
-
-                    claim_sub = claim_text[:min(40, len(claim_text))].lower()
-                    phrase_match = len(claim_sub) >= 15 and claim_sub in s_lower
-
-                    is_match = False
-                    if quant_in_s and (token_overlap or len(quant_in_s) >= 2):
-                        is_match = True
-                    elif phrase_match:
-                        is_match = True
-                    elif len(content_tokens) >= 3 and (token_ratio >= 0.50 or len(token_overlap) >= 3):
-                        is_match = True
-                    elif len(content_tokens) < 3 and len(token_overlap) >= 2:
-                        is_match = True
-
-                    if is_match:
-                        claim_flagged = True
-                        if s.endswith("."):
-                            qualified_sentence = s[:-1].rstrip() + adj_tag + "."
-                        else:
-                            qualified_sentence = s.rstrip() + adj_tag
-                        new_sentences.append(qualified_sentence)
-                    else:
-                        new_sentences.append(s)
-
-                new_paragraphs.append(" ".join(new_sentences))
-
-            modified_text = "\n\n".join(new_paragraphs)
-
-            # Record prominent caveat in unresolved_uncertainties if flagged or present
-            quant_in_answer = any(q.lower() in modified_text.lower() for q in significant_quant)
-            claim_in_answer = claim_flagged or quant_in_answer or (claim_text[:50].lower() in modified_text.lower())
-
-            if claim_in_answer:
-                already_disclosed = (
-                    v.claim_id.lower() in existing_uncertainties_lower
-                    or (significant_quant and any(q.lower() in existing_uncertainties_lower for q in significant_quant))
+            # Record in uncertainties list (once per claim)
+            already_disclosed = (
+                v.claim_id.lower() in existing_uncertainties_lower
+                or (significant_quant and any(q.lower() in existing_uncertainties_lower for q in significant_quant))
+            )
+            if not already_disclosed:
+                caveat_type = "Unverified quantitative claim" if significant_quant else "Unverified claim"
+                caveat = (
+                    f"{caveat_type} [{v.claim_id}]: '{claim_text}' is {status_desc} "
+                    f"({v.explanation}). It must not be treated as a verified empirical finding."
                 )
-                if not already_disclosed:
-                    caveat_type = "Unverified quantitative claim" if significant_quant else "Unverified claim"
-                    caveat = (
-                        f"{caveat_type} [{v.claim_id}]: '{claim_text}' is {status_desc} "
-                        f"({v.explanation}). It must not be treated as a verified empirical finding."
-                    )
-                    uncertainties.append(caveat)
-                    existing_uncertainties_lower += " " + caveat.lower()
+                uncertainties.append(caveat)
+                existing_uncertainties_lower += " " + caveat.lower()
 
-        return modified_text, uncertainties
+            # Record key uncertainty entry for the single concise uncertainty section
+            entry_key = v.claim_id.lower()
+            if entry_key not in seen_entry_keys:
+                seen_entry_keys.add(entry_key)
+                if is_contradicted:
+                    key_uncertainty_entries.append(
+                        f"- [Contradicted by evidence: {v.explanation}] {claim_text}"
+                    )
+                else:
+                    key_uncertainty_entries.append(
+                        f"- [Unverified / Inconclusive: {v.explanation}] {claim_text}"
+                    )
+
+        # Append key uncertainties once in a concise section if not already present
+        if key_uncertainty_entries:
+            if "### Key Uncertainties" not in cleaned_text and "[Unverified / Inconclusive:" not in cleaned_text:
+                uncertainty_section = "\n\n### Key Uncertainties & Verification Qualifications\n" + "\n".join(key_uncertainty_entries)
+                cleaned_text = f"{cleaned_text.rstrip()}{uncertainty_section}"
+
+        return cleaned_text, uncertainties
 
     @classmethod
     def _format_unadjudicated_fallback(
@@ -1012,6 +965,29 @@ class DebateOrchestrator:
                                 verdict_summary,
                                 flags=re.IGNORECASE,
                             )
+
+                    # Ensure Judge cannot describe an inconclusive or not-checked claim as verified
+                    inconclusive_claims = [
+                        v for v in (verifications or [])
+                        if v.status in (ClaimStatus.INSUFFICIENT_EVIDENCE, ClaimStatus.NOT_CHECKED)
+                    ]
+                    if inconclusive_claims and verdict_summary:
+                        verdict_summary = re.sub(
+                            r"\b(?:all\s+claims|touchdown\s+time|metrics?|figures?|claims?)\s+(?:are\s+|were\s+|has\s+been\s+|have\s+been\s+)?(?:verified|corroborated|confirmed)(?:\s+by\s+[^.,;\n]+)?\b",
+                            "claims were partially corroborated, with key details remaining inconclusive/unverified",
+                            verdict_summary,
+                            flags=re.IGNORECASE,
+                        )
+                        # Sanitize any remaining verification claims in verdict_summary
+                        if "verified" in verdict_summary.lower():
+                            verdict_summary = re.sub(
+                                r"\b(?:is\s+|was\s+|were\s+|has\s+been\s+|have\s+been\s+)?verified(?:\s+by\s+[^.,;\n]+)?\b",
+                                "unverified / inconclusive in retrieved evidence",
+                                verdict_summary,
+                                flags=re.IGNORECASE,
+                            )
+
+
 
                     trace.append(
                         AgentTraceEntry(
