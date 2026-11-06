@@ -16,6 +16,7 @@ Workflow:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import re
 import time
@@ -248,16 +249,71 @@ class DebateOrchestrator:
 
         return "\n".join(lines)
 
-    def _has_material_issues(self, critic_output: Any) -> bool:
+    @classmethod
+    def _is_substantive_issue_text(cls, text: str) -> bool:
+        """Filter out placeholder LLM strings like 'None', 'N/A', 'No contradictions observed'."""
+        if not text or not isinstance(text, str):
+            return False
+        cleaned = text.strip().lower().rstrip(".").rstrip(",")
+        trivial = {
+            "", "none", "n/a", "na", "nil", "null", "none identified", "none observed",
+            "no contradictions", "no contradictions found", "no contradictions identified",
+            "no unsupported claims", "no unsupported claims found", "no unsupported claims identified",
+            "no material issues", "no issues", "none noted", "no significant issues",
+            "no major issues", "no material unresolved issues", "none detected", "not applicable",
+        }
+        return cleaned not in trivial
+
+    def _has_material_issues(
+        self,
+        critic_output: Any,
+        verifications: list[ClaimVerificationResult] | None = None,
+    ) -> bool:
         """
-        Check if the Critic identified material unresolved issues.
-        Material issues are HIGH or MEDIUM severity issues or direct contradictions.
+        Check if the Critic or Claim Verification identified material unresolved issues.
+        Material issues include:
+        1. HIGH or MEDIUM severity issues targeting candidate answers.
+        2. Substantive factual contradictions between candidates.
+        3. Substantive unsupported claims lacking evidence or logical backing.
+        4. Any claim directly CONTRADICTED by empirical evidence that remains unresolved.
         """
+        if not critic_output:
+            return True
+
+        # Check for High or Medium severity critique issues
         high_med_issues = [
-            i for i in critic_output.issues
-            if i.severity in {CritiqueSeverity.HIGH, CritiqueSeverity.MEDIUM}
+            i for i in getattr(critic_output, "issues", [])
+            if getattr(i, "severity", None) in {CritiqueSeverity.HIGH, CritiqueSeverity.MEDIUM}
         ]
-        return bool(high_med_issues or critic_output.contradictions or critic_output.unsupported_claims)
+        if high_med_issues:
+            return True
+
+        # Check for substantive contradictions between candidates
+        contradictions = [
+            c for c in getattr(critic_output, "contradictions", [])
+            if self._is_substantive_issue_text(c)
+        ]
+        if contradictions:
+            return True
+
+        # Check for substantive unsupported claims
+        unsupported = [
+            u for u in getattr(critic_output, "unsupported_claims", [])
+            if self._is_substantive_issue_text(u)
+        ]
+        if unsupported:
+            return True
+
+        # Check for unresolved empirical contradictions from retrieval verification
+        if verifications:
+            flagged_claims = {
+                getattr(i, "claim_id", None) for i in getattr(critic_output, "issues", [])
+            }
+            for v in verifications:
+                if v.status == ClaimStatus.CONTRADICTED and v.claim_id in flagged_claims:
+                    return True
+
+        return False
 
     @classmethod
     def _enforce_grounding_in_answer(
@@ -503,8 +559,10 @@ class DebateOrchestrator:
             return self._build_budget_error_response(clean_query, trace)
 
         planner_warning: str | None = None
+        t_plan_start = time.monotonic()
         try:
             plan, _ = await self._planner.plan(clean_query)
+            t_plan_ms = (time.monotonic() - t_plan_start) * 1000
             trace.append(
                 AgentTraceEntry(
                     agent=AgentRole.PLANNER,
@@ -514,9 +572,11 @@ class DebateOrchestrator:
                         f"Subtasks: {', '.join(plan.subtasks)}\n"
                         f"Constraints: {', '.join(plan.constraints) if plan.constraints else 'None'}"
                     ),
+                    duration_ms=round(t_plan_ms, 1),
                 )
             )
         except LLMValidationError as exc:
+            t_plan_ms = (time.monotonic() - t_plan_start) * 1000
             sanitized = sanitize_error_message(str(exc))
             self._logger.warning("Planner agent output validation failed: %s. Using fallback plan.", sanitized)
             planner_warning = (
@@ -540,9 +600,11 @@ class DebateOrchestrator:
                         f"Subtasks: {', '.join(plan.subtasks)}\n"
                         f"Constraints: None (fallback plan)"
                     ),
+                    duration_ms=round(t_plan_ms, 1),
                 )
             )
         except Exception as exc:
+            t_plan_ms = (time.monotonic() - t_plan_start) * 1000
             sanitized = sanitize_error_message(str(exc))
             self._logger.error("Planner agent failed: %s", sanitized, exc_info=True)
             trace.append(
@@ -550,6 +612,7 @@ class DebateOrchestrator:
                     agent=AgentRole.PLANNER,
                     round_number=0,
                     output=f"Planning failed: {sanitized}",
+                    duration_ms=round(t_plan_ms, 1),
                 )
             )
             return QueryResponse(
@@ -562,59 +625,110 @@ class DebateOrchestrator:
                 trace=trace,
                 sources=[],
                 error_message=f"Planner agent failure: {sanitized}",
+                total_duration_ms=round(t_plan_ms, 1),
             )
 
         # ──────────────────────────────────────────────────────────────────────────
-        # Step 2: Initial Candidates (Round 1)
+        # Step 2: Initial Candidates (Round 1) - Concurrent Execution
         # ──────────────────────────────────────────────────────────────────────────
         cand_a: ExecutorOutput | None = None
         cand_b: ExecutorOutput | None = None
 
-        if not self._increment_call_count():
-            return self._build_budget_error_response(clean_query, trace, subtasks=plan.subtasks)
+        async def _run_initial_executor_a() -> tuple[ExecutorOutput | None, float, Exception | None]:
+            if not self._increment_call_count():
+                return None, 0.0, RuntimeError("LLM call budget exceeded")
+            t_start = time.monotonic()
+            try:
+                out, _ = await self._executor_a.execute(clean_query, plan)
+                return out, (time.monotonic() - t_start) * 1000, None
+            except Exception as exc:
+                return None, (time.monotonic() - t_start) * 1000, exc
 
-        try:
-            cand_a, _ = await self._executor_a.execute(clean_query, plan)
-            trace.append(
-                AgentTraceEntry(
-                    agent=AgentRole.EXECUTOR_A,
-                    round_number=1,
-                    output=cand_a.answer,
-                )
-            )
-        except Exception as exc:
-            sanitized = sanitize_error_message(str(exc))
+        async def _run_initial_executor_b() -> tuple[ExecutorOutput | None, float, Exception | None]:
+            if not self._increment_call_count():
+                return None, 0.0, RuntimeError("LLM call budget exceeded")
+            t_start = time.monotonic()
+            try:
+                out, _ = await self._executor_b.execute(clean_query, plan)
+                return out, (time.monotonic() - t_start) * 1000, None
+            except Exception as exc:
+                return None, (time.monotonic() - t_start) * 1000, exc
+
+        res_a, res_b = await asyncio.gather(
+            _run_initial_executor_a(),
+            _run_initial_executor_b(),
+            return_exceptions=True,
+        )
+
+        # Unpack Executor A result
+        if isinstance(res_a, Exception):
+            sanitized = sanitize_error_message(str(res_a))
             self._logger.error("Executor A failed on round 1: %s", sanitized, exc_info=True)
             trace.append(
                 AgentTraceEntry(
                     agent=AgentRole.EXECUTOR_A,
                     round_number=1,
                     output=f"Initial generation failed: {sanitized}",
+                    duration_ms=0.0,
                 )
             )
-
-        if not self._increment_call_count():
-            return self._build_budget_error_response(clean_query, trace, subtasks=plan.subtasks)
-
-        try:
-            cand_b, _ = await self._executor_b.execute(clean_query, plan)
-            trace.append(
-                AgentTraceEntry(
-                    agent=AgentRole.EXECUTOR_B,
-                    round_number=1,
-                    output=cand_b.answer,
+        else:
+            cand_a, t_exec_a_ms, err_a = res_a
+            if err_a is not None:
+                sanitized = sanitize_error_message(str(err_a))
+                self._logger.error("Executor A failed on round 1: %s", sanitized, exc_info=True)
+                trace.append(
+                    AgentTraceEntry(
+                        agent=AgentRole.EXECUTOR_A,
+                        round_number=1,
+                        output=f"Initial generation failed: {sanitized}",
+                        duration_ms=round(t_exec_a_ms, 1),
+                    )
                 )
-            )
-        except Exception as exc:
-            sanitized = sanitize_error_message(str(exc))
+            elif cand_a is not None:
+                trace.append(
+                    AgentTraceEntry(
+                        agent=AgentRole.EXECUTOR_A,
+                        round_number=1,
+                        output=cand_a.answer,
+                        duration_ms=round(t_exec_a_ms, 1),
+                    )
+                )
+
+        # Unpack Executor B result
+        if isinstance(res_b, Exception):
+            sanitized = sanitize_error_message(str(res_b))
             self._logger.error("Executor B failed on round 1: %s", sanitized, exc_info=True)
             trace.append(
                 AgentTraceEntry(
                     agent=AgentRole.EXECUTOR_B,
                     round_number=1,
                     output=f"Initial generation failed: {sanitized}",
+                    duration_ms=0.0,
                 )
             )
+        else:
+            cand_b, t_exec_b_ms, err_b = res_b
+            if err_b is not None:
+                sanitized = sanitize_error_message(str(err_b))
+                self._logger.error("Executor B failed on round 1: %s", sanitized, exc_info=True)
+                trace.append(
+                    AgentTraceEntry(
+                        agent=AgentRole.EXECUTOR_B,
+                        round_number=1,
+                        output=f"Initial generation failed: {sanitized}",
+                        duration_ms=round(t_exec_b_ms, 1),
+                    )
+                )
+            elif cand_b is not None:
+                trace.append(
+                    AgentTraceEntry(
+                        agent=AgentRole.EXECUTOR_B,
+                        round_number=1,
+                        output=cand_b.answer,
+                        duration_ms=round(t_exec_b_ms, 1),
+                    )
+                )
 
         if cand_a is None and cand_b is None:
             return QueryResponse(
@@ -659,8 +773,11 @@ class DebateOrchestrator:
         claim_status_map: dict[str, RetrievalStatus] = {}
         verifications: list[ClaimVerificationResult] = []
         verification_report: ClaimVerificationReport | None = None
+        retrieval_duration_ms: float | None = None
+        verify_duration_ms: float | None = None
 
         if claims_to_verify:
+            t_retrieval_start = time.monotonic()
             try:
                 retrieval_status, evidence_items, claim_evidence_map, claim_status_map = await retrieve_for_claims(
                     claims=claims_to_verify,
@@ -669,9 +786,11 @@ class DebateOrchestrator:
                     max_total_sources=MAX_EVIDENCE_ITEMS,
                     concurrency_limit=3,
                 )
+                retrieval_duration_ms = round((time.monotonic() - t_retrieval_start) * 1000, 1)
                 for item in evidence_items:
                     surfaced_sources[item.url] = item
             except Exception as exc:
+                retrieval_duration_ms = round((time.monotonic() - t_retrieval_start) * 1000, 1)
                 sanitized = sanitize_error_message(str(exc))
                 self._logger.warning("Targeted retrieval call failed: %s", sanitized)
                 retrieval_status = RetrievalStatus.ERROR
@@ -680,6 +799,7 @@ class DebateOrchestrator:
 
             # Verify claims with ClaimVerificationService
             if self._increment_call_count():
+                t_verify_start = time.monotonic()
                 try:
                     verification_report = await self._claim_verifier.verify_claims(
                         claims=claims_to_verify,
@@ -688,8 +808,12 @@ class DebateOrchestrator:
                         claim_evidence_map=claim_evidence_map,
                         claim_status_map=claim_status_map,
                     )
+                    verify_duration_ms = round((time.monotonic() - t_verify_start) * 1000, 1)
+                    verification_report.duration_ms = verify_duration_ms
+                    verification_report.retrieval_duration_ms = retrieval_duration_ms
                     verifications = verification_report.results
                 except Exception as exc:
+                    verify_duration_ms = round((time.monotonic() - t_verify_start) * 1000, 1)
                     sanitized = sanitize_error_message(str(exc))
                     self._logger.warning("Claim verification failed: %s", sanitized)
                     # Build a failed report so the frontend can display why verification failed
@@ -710,6 +834,8 @@ class DebateOrchestrator:
                         evidence_count=len(evidence_items),
                         claims_checked=0,
                         claims_not_checked=len(claims_to_verify),
+                        duration_ms=verify_duration_ms,
+                        retrieval_duration_ms=retrieval_duration_ms,
                     )
         else:
             self._logger.debug("No factual claims collected for retrieval.")
@@ -721,6 +847,8 @@ class DebateOrchestrator:
                 evidence_count=0,
                 claims_checked=0,
                 claims_not_checked=0,
+                duration_ms=0.0,
+                retrieval_duration_ms=0.0,
             )
 
         # ──────────────────────────────────────────────────────────────────────────
@@ -731,10 +859,12 @@ class DebateOrchestrator:
         critic_output: Any = None
 
         while current_round <= effective_max_rounds:
+            round_start_time = time.monotonic()
             # 1. Critique
             if not self._increment_call_count():
                 break
 
+            t_crit_start = time.monotonic()
             try:
                 critic_output, _ = await self._critic.critique(
                     query=clean_query,
@@ -743,7 +873,9 @@ class DebateOrchestrator:
                     executor_b=cand_b,
                     verifications=verifications,
                 )
+                t_crit_ms = (time.monotonic() - t_crit_start) * 1000
             except Exception as exc:
+                t_crit_ms = (time.monotonic() - t_crit_start) * 1000
                 sanitized = sanitize_error_message(str(exc))
                 self._logger.warning("Critic failed in round %d: %s", current_round, sanitized)
                 trace.append(
@@ -753,6 +885,7 @@ class DebateOrchestrator:
                         output=f"Critique generation failed: {sanitized}",
                         evidence=[],
                         unresolved_issues=[],
+                        duration_ms=round(t_crit_ms, 1),
                     )
                 )
                 break
@@ -766,25 +899,20 @@ class DebateOrchestrator:
                     output=critic_output.overall_critique,
                     evidence=list(surfaced_sources.values()),
                     unresolved_issues=unresolved,
+                    duration_ms=round(t_crit_ms, 1),
                 )
             )
 
-            # 2. Similarity and Convergence Evaluation
+            # 2. Convergence Evaluation
             sim_score = compute_answer_similarity(cand_a.answer, cand_b.answer)
-            has_issues = self._has_material_issues(critic_output)
+            has_issues = self._has_material_issues(critic_output, verifications)
 
-            single_candidate_mode = (
-                "[FAILED - Single Candidate Mode" in (cand_a.approach_summary or "")
-                or "[FAILED - Single Candidate Mode" in (cand_b.approach_summary or "")
-            )
-
-            # Converged if NO material issues remain, or similarity threshold met without critical flaws
-            # (Disallow similarity-based early convergence if running in single-candidate fallback mode)
-            if not has_issues or (
-                not single_candidate_mode
-                and sim_score >= self._settings.debate_similarity_threshold
-                and not any(i.severity == CritiqueSeverity.HIGH for i in critic_output.issues)
-            ):
+            # Convergence rule (Priority 2):
+            # A debate round can only converge early when NO material unresolved issues remain.
+            # Semantic similarity alone is NEVER treated as proof of factual correctness.
+            # When material issues (factual errors, unsupported claims, contradictions) are resolved,
+            # another round is skipped immediately.
+            if not has_issues:
                 converged = True
 
             addressed_round_issues = list(set(
@@ -805,17 +933,17 @@ class DebateOrchestrator:
                     addressed_issues=addressed_round_issues,
                     executor_a_notes=a_notes,
                     executor_b_notes=b_notes,
+                    duration_ms=round((time.monotonic() - round_start_time) * 1000, 1),
                 )
             )
 
             # 3. Check Stopping Conditions
             if converged:
                 self._logger.info(
-                    "Debate reached early convergence in round %d (similarity=%.3f, has_issues=%s, single_cand=%s)",
+                    "Debate reached early convergence in round %d (similarity=%.3f, has_issues=%s)",
                     current_round,
                     sim_score,
                     has_issues,
-                    single_candidate_mode,
                 )
                 break
 
@@ -823,70 +951,128 @@ class DebateOrchestrator:
                 self._logger.info("Debate reached maximum rounds budget (%d)", effective_max_rounds)
                 break
 
-            # 4. Revisions for Next Round
+            # 4. Revisions for Next Round - Concurrent Execution
             next_round = current_round + 1
             prev_a_answer = cand_a.answer
             prev_b_answer = cand_b.answer
 
-            # Executor A Revision
-            if self._increment_call_count():
-                critique_a = self._format_critique_for_executor("executor_a", critic_output, verifications)
+            critique_a = self._format_critique_for_executor("executor_a", critic_output, verifications)
+            critique_b = self._format_critique_for_executor("executor_b", critic_output, verifications)
+            evidence_list = list(surfaced_sources.values())
+
+            async def _run_rev_a() -> tuple[ExecutorOutput | None, float, Exception | None]:
+                if not self._increment_call_count():
+                    return None, 0.0, RuntimeError("LLM call budget exceeded")
+                t_start = time.monotonic()
                 try:
-                    revised_a, _ = await self._executor_a.revise(
+                    revised, _ = await self._executor_a.revise(
                         query=clean_query,
                         plan=plan,
                         prior_output=cand_a,
                         critique_findings=critique_a,
-                        evidence=list(surfaced_sources.values()),
+                        evidence=evidence_list,
                     )
-                    cand_a = revised_a
-                    trace.append(
-                        AgentTraceEntry(
-                            agent=AgentRole.EXECUTOR_A,
-                            round_number=next_round,
-                            output=cand_a.answer,
-                        )
-                    )
+                    return revised, (time.monotonic() - t_start) * 1000, None
                 except Exception as exc:
-                    sanitized = sanitize_error_message(str(exc))
+                    return None, (time.monotonic() - t_start) * 1000, exc
+
+            async def _run_rev_b() -> tuple[ExecutorOutput | None, float, Exception | None]:
+                if not self._increment_call_count():
+                    return None, 0.0, RuntimeError("LLM call budget exceeded")
+                t_start = time.monotonic()
+                try:
+                    revised, _ = await self._executor_b.revise(
+                        query=clean_query,
+                        plan=plan,
+                        prior_output=cand_b,
+                        critique_findings=critique_b,
+                        evidence=evidence_list,
+                    )
+                    return revised, (time.monotonic() - t_start) * 1000, None
+                except Exception as exc:
+                    return None, (time.monotonic() - t_start) * 1000, exc
+
+            rev_res_a, rev_res_b = await asyncio.gather(
+                _run_rev_a(),
+                _run_rev_b(),
+                return_exceptions=True,
+            )
+
+            # Unpack Executor A revision
+            if isinstance(rev_res_a, Exception):
+                sanitized = sanitize_error_message(str(rev_res_a))
+                self._logger.warning("Executor A revision failed in round %d: %s", next_round, sanitized)
+                trace.append(
+                    AgentTraceEntry(
+                        agent=AgentRole.EXECUTOR_A,
+                        round_number=next_round,
+                        output=f"[Revision failed: {sanitized}. Preserving prior candidate.]",
+                        duration_ms=0.0,
+                    )
+                )
+            else:
+                rev_a, t_rev_a_ms, err_a = rev_res_a
+                if err_a is not None:
+                    sanitized = sanitize_error_message(str(err_a))
                     self._logger.warning("Executor A revision failed in round %d: %s", next_round, sanitized)
                     trace.append(
                         AgentTraceEntry(
                             agent=AgentRole.EXECUTOR_A,
                             round_number=next_round,
                             output=f"[Revision failed: {sanitized}. Preserving prior candidate.]",
+                            duration_ms=round(t_rev_a_ms, 1),
+                        )
+                    )
+                elif rev_a is not None:
+                    cand_a = rev_a
+                    trace.append(
+                        AgentTraceEntry(
+                            agent=AgentRole.EXECUTOR_A,
+                            round_number=next_round,
+                            output=cand_a.answer,
+                            duration_ms=round(t_rev_a_ms, 1),
                         )
                     )
 
-            # Executor B Revision
-            if self._increment_call_count():
-                critique_b = self._format_critique_for_executor("executor_b", critic_output, verifications)
-                try:
-                    revised_b, _ = await self._executor_b.revise(
-                        query=clean_query,
-                        plan=plan,
-                        prior_output=cand_b,
-                        critique_findings=critique_b,
-                        evidence=list(surfaced_sources.values()),
+            # Unpack Executor B revision
+            if isinstance(rev_res_b, Exception):
+                sanitized = sanitize_error_message(str(rev_res_b))
+                self._logger.warning("Executor B revision failed in round %d: %s", next_round, sanitized)
+                trace.append(
+                    AgentTraceEntry(
+                        agent=AgentRole.EXECUTOR_B,
+                        round_number=next_round,
+                        output=f"[Revision failed: {sanitized}. Preserving prior candidate.]",
+                        duration_ms=0.0,
                     )
-                    cand_b = revised_b
-                    trace.append(
-                        AgentTraceEntry(
-                            agent=AgentRole.EXECUTOR_B,
-                            round_number=next_round,
-                            output=cand_b.answer,
-                        )
-                    )
-                except Exception as exc:
-                    sanitized = sanitize_error_message(str(exc))
+                )
+            else:
+                rev_b, t_rev_b_ms, err_b = rev_res_b
+                if err_b is not None:
+                    sanitized = sanitize_error_message(str(err_b))
                     self._logger.warning("Executor B revision failed in round %d: %s", next_round, sanitized)
                     trace.append(
                         AgentTraceEntry(
                             agent=AgentRole.EXECUTOR_B,
                             round_number=next_round,
                             output=f"[Revision failed: {sanitized}. Preserving prior candidate.]",
+                            duration_ms=round(t_rev_b_ms, 1),
                         )
                     )
+                elif rev_b is not None:
+                    cand_b = rev_b
+                    trace.append(
+                        AgentTraceEntry(
+                            agent=AgentRole.EXECUTOR_B,
+                            round_number=next_round,
+                            output=cand_b.answer,
+                            duration_ms=round(t_rev_b_ms, 1),
+                        )
+                    )
+
+            # Update round duration to include both critique and revisions
+            if debate_rounds:
+                debate_rounds[-1].duration_ms = round((time.monotonic() - round_start_time) * 1000, 1)
 
             # Avoid repeated identical revisions
             if cand_a.answer == prev_a_answer and cand_b.answer == prev_b_answer:
@@ -929,6 +1115,7 @@ class DebateOrchestrator:
             pipeline_error = "Critic agent failed during debate; returned unadjudicated fallback candidate without critique."
         else:
             if self._increment_call_count():
+                t_judge_start = time.monotonic()
                 try:
                     judge_output, _ = await self._judge.judge(
                         query=clean_query,
@@ -939,6 +1126,7 @@ class DebateOrchestrator:
                         evidence=list(surfaced_sources.values()),
                         verifications=verifications,
                     )
+                    t_judge_ms = (time.monotonic() - t_judge_start) * 1000
 
                     # Grounding check: enforce that cited URLs only refer to known surfaced sources
                     valid_urls = set(surfaced_sources.keys())
@@ -987,16 +1175,16 @@ class DebateOrchestrator:
                                 flags=re.IGNORECASE,
                             )
 
-
-
                     trace.append(
                         AgentTraceEntry(
                             agent=AgentRole.JUDGE,
                             round_number=rounds_completed,
                             output=judge_output.final_answer,
+                            duration_ms=round(t_judge_ms, 1),
                         )
                     )
                 except Exception as exc:
+                    t_judge_ms = (time.monotonic() - t_judge_start) * 1000
                     sanitized = sanitize_error_message(str(exc))
                     self._logger.error("Judge adjudication failed: %s", sanitized, exc_info=True)
                     trace.append(
@@ -1004,12 +1192,13 @@ class DebateOrchestrator:
                             agent=AgentRole.JUDGE,
                             round_number=rounds_completed,
                             output=f"Judge failed: {sanitized}. Returning unadjudicated fallback candidate.",
+                            duration_ms=round(t_judge_ms, 1),
                         )
                     )
                     failure_reason = f"Judge adjudication failed: {sanitized}"
                     final_answer = self._format_unadjudicated_fallback(cand_a.answer, failure_reason, verification_report)
-                    status = DebateStatus.ERROR if rounds_completed == 0 else DebateStatus.MAX_ROUNDS
-                    verdict_summary = f"Judge adjudication failed ({sanitized}); using unadjudicated fallback candidate."
+                    status = DebateStatus.ERROR
+                    verdict_summary = f"[UNADJUDICATED FALLBACK] Judge adjudication failed ({sanitized}); fallback candidate returned without Judge approval."
                     unresolved_uncertainties = [
                         "Adjudication fallback: Final answer synthesized directly from prior executor candidate without full Judge review."
                     ]
@@ -1027,8 +1216,8 @@ class DebateOrchestrator:
             else:
                 failure_reason = "Adjudication skipped due to LLM call budget limits"
                 final_answer = self._format_unadjudicated_fallback(cand_a.answer, failure_reason, verification_report)
-                status = DebateStatus.ERROR if rounds_completed == 0 else DebateStatus.MAX_ROUNDS
-                verdict_summary = "Adjudication skipped due to LLM call budget limits; unadjudicated fallback candidate returned."
+                status = DebateStatus.ERROR
+                verdict_summary = "[UNADJUDICATED FALLBACK] Adjudication skipped due to LLM call budget limits; unadjudicated fallback candidate returned."
                 unresolved_uncertainties = ["Debate ended early due to LLM call budget."]
                 pipeline_error = "Adjudication skipped due to LLM call budget."
 
@@ -1058,6 +1247,7 @@ class DebateOrchestrator:
             verdict_summary=verdict_summary,
             unresolved_uncertainties=unresolved_uncertainties,
             error_message=pipeline_error,
+            total_duration_ms=round(elapsed * 1000, 1),
         )
 
     def _build_budget_error_response(

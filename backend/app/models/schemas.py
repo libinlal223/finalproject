@@ -481,6 +481,14 @@ class ClaimVerificationReport(BaseModel):
         default=0,
         description="Number of claims that were submitted but could not be evaluated.",
     )
+    duration_ms: float | None = Field(
+        default=None,
+        description="Verification service execution duration in milliseconds.",
+    )
+    retrieval_duration_ms: float | None = Field(
+        default=None,
+        description="Evidence retrieval execution duration in milliseconds.",
+    )
 
 
 # ─── Per-agent trace entry ────────────────────────────────────────────────────
@@ -503,6 +511,10 @@ class AgentTraceEntry(BaseModel):
     unresolved_issues: list[str] = Field(
         default_factory=list,
         description="Issues the Critic raised that were not resolved in this round.",
+    )
+    duration_ms: float | None = Field(
+        default=None,
+        description="Execution duration for this agent step in milliseconds.",
     )
     timestamp: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
@@ -546,6 +558,10 @@ class DebateRound(BaseModel):
     executor_b_notes: str | None = Field(
         default=None,
         description="Summary of changes or approach for Executor B in this round.",
+    )
+    duration_ms: float | None = Field(
+        default=None,
+        description="Total duration of this debate round in milliseconds.",
     )
 
 
@@ -595,6 +611,10 @@ class QueryResponse(BaseModel):
     error_message: str | None = Field(
         default=None,
         description="Human-readable error description (present when status is 'error').",
+    )
+    total_duration_ms: float | None = Field(
+        default=None,
+        description="Total end-to-end debate execution duration in milliseconds.",
     )
 
 

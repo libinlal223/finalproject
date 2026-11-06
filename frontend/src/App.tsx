@@ -185,6 +185,7 @@ export const App: React.FC = () => {
                     subtasks={response.subtasks}
                     verdictSummary={response.verdict_summary}
                     unresolvedUncertainties={response.unresolved_uncertainties}
+                    totalDurationMs={response.total_duration_ms}
                     onReset={handleReset}
                   />
 

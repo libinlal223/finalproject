@@ -119,6 +119,8 @@ class GeminiLLMClient(BaseLLMClient):
         json_mode: bool | None = None,
     ) -> LLMResponse:
         override_retry_wait = self._config.extra.get("retry_wait")
+        MAX_RATE_LIMIT_WAIT_SECONDS = 12.0
+        MAX_RATE_LIMIT_RETRIES = 2
 
         def _compute_wait(retry_state) -> float:
             if override_retry_wait is not None:
@@ -126,8 +128,8 @@ class GeminiLLMClient(BaseLLMClient):
             if retry_state.outcome and retry_state.outcome.failed:
                 exc = retry_state.outcome.exception()
                 if isinstance(exc, LLMRateLimitError) and exc.retry_after is not None:
-                    return min(max(exc.retry_after + 0.5, 1.0), 45.0)
-            return wait_exponential(multiplier=1, min=2, max=30)(retry_state)
+                    return min(max(exc.retry_after + 0.1, 0.5), MAX_RATE_LIMIT_WAIT_SECONDS)
+            return wait_exponential(multiplier=0.5, min=1, max=6)(retry_state)
 
         def _should_retry(retry_state) -> bool:
             if not (retry_state.outcome and retry_state.outcome.failed):
@@ -136,7 +138,19 @@ class GeminiLLMClient(BaseLLMClient):
             if isinstance(exc, LLMTimeoutError):
                 return True
             if isinstance(exc, LLMRateLimitError):
-                if exc.retry_after is not None and exc.retry_after > 45.0:
+                # Bound rate-limit retries to prevent long pipeline stalls
+                if retry_state.attempt_number > MAX_RATE_LIMIT_RETRIES:
+                    logger.warning(
+                        "Gemini rate limit: reached maximum rate limit retries (%d); aborting to trigger safe fallback.",
+                        MAX_RATE_LIMIT_RETRIES,
+                    )
+                    return False
+                if exc.retry_after is not None and exc.retry_after > MAX_RATE_LIMIT_WAIT_SECONDS:
+                    logger.warning(
+                        "Gemini rate limit: retry_after (%.1fs) exceeds maximum wait budget (%.1fs); aborting retries.",
+                        exc.retry_after,
+                        MAX_RATE_LIMIT_WAIT_SECONDS,
+                    )
                     return False
                 return True
             return False

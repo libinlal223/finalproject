@@ -102,7 +102,14 @@ export const AgentTraceViewer: React.FC<AgentTraceViewerProps> = ({ trace }) => 
                     </span>
                   </div>
                   <div className="trace-timestamp">
-                    {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    {entry.duration_ms !== undefined && entry.duration_ms !== null && (
+                      <span className="trace-duration-tag">
+                        ⏱️ {(entry.duration_ms / 1000).toFixed(2)}s
+                      </span>
+                    )}
+                    <span>
+                      {new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    </span>
                   </div>
                 </div>
 

@@ -52,6 +52,7 @@ export interface DebateRound {
   addressed_issues?: string[];
   executor_a_notes?: string | null;
   executor_b_notes?: string | null;
+  duration_ms?: number | null;
 }
 
 export interface AgentTraceEntry {
@@ -61,6 +62,7 @@ export interface AgentTraceEntry {
   evidence: EvidenceItem[];
   unresolved_issues: string[];
   timestamp: string;
+  duration_ms?: number | null;
 }
 
 export interface QueryRequest {
@@ -108,6 +110,8 @@ export interface ClaimVerificationReport {
   evidence_count: number;
   claims_checked: number;
   claims_not_checked: number;
+  duration_ms?: number | null;
+  retrieval_duration_ms?: number | null;
 }
 
 // ─── API Response ─────────────────────────────────────────────────────────────
@@ -125,6 +129,7 @@ export interface QueryResponse {
   verdict_summary?: string | null;
   unresolved_uncertainties?: string[];
   error_message?: string | null;
+  total_duration_ms?: number | null;
 }
 
 export interface ErrorDetail {

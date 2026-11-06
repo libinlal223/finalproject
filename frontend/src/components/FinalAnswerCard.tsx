@@ -8,6 +8,7 @@ interface FinalAnswerCardProps {
   subtasks: string[];
   verdictSummary?: string | null;
   unresolvedUncertainties?: string[];
+  totalDurationMs?: number | null;
   onReset: () => void;
 }
 
@@ -18,6 +19,7 @@ export const FinalAnswerCard: React.FC<FinalAnswerCardProps> = ({
   subtasks,
   verdictSummary,
   unresolvedUncertainties,
+  totalDurationMs,
   onReset,
 }) => {
   const [copied, setCopied] = useState(false);
@@ -33,7 +35,15 @@ export const FinalAnswerCard: React.FC<FinalAnswerCardProps> = ({
     }
   };
 
+  const isUnadjudicatedFallback =
+    status === 'error' ||
+    (finalAnswer?.startsWith('[UNADJUDICATED FALLBACK') ?? false) ||
+    (verdictSummary?.toLowerCase().includes('unadjudicated') ?? false);
+
   const getStatusBadge = (s: DebateStatus) => {
+    if (isUnadjudicatedFallback) {
+      return <span className="status-badge badge-error">Unadjudicated Fallback (Judge Failed)</span>;
+    }
     switch (s) {
       case 'completed':
         return <span className="status-badge badge-success">Adjudicated by Judge</span>;
@@ -63,13 +73,18 @@ export const FinalAnswerCard: React.FC<FinalAnswerCardProps> = ({
           </div>
           <div>
             <h2 className="card-main-title">
-              {status === 'error' ? 'Candidate Output (Unadjudicated Fallback)' : 'Final Synthesis & Adjudication'}
+              {isUnadjudicatedFallback ? 'Candidate Output (Unadjudicated Fallback)' : 'Final Synthesis & Adjudication'}
             </h2>
             <div className="badge-row">
               {getStatusBadge(status)}
               <span className="round-badge">
                 {roundsCompleted} {roundsCompleted === 1 ? 'Round' : 'Rounds'} Completed
               </span>
+              {totalDurationMs !== undefined && totalDurationMs !== null && (
+                <span className="round-badge duration-badge" title="Total Pipeline Duration">
+                  ⏱️ {(totalDurationMs / 1000).toFixed(1)}s
+                </span>
+              )}
             </div>
           </div>
         </div>
